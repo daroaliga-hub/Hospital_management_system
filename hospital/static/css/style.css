@@ -1,0 +1,123 @@
+/* ==========================================
+   GLOBAL
+========================================== */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #263746;
+    background-color: #ffffff;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/* ==========================================
+   TOP BAR
+========================================== */
+
+.top-bar {
+    background-color: #003b5c;
+    color: white;
+    font-size: 14px;
+    padding: 8px 0;
+}
+
+.top-link {
+    color: white;
+    font-weight: 600;
+}
+
+.top-link:hover {
+    color: #d5eef7;
+}
+
+
+/* ==========================================
+   NAVIGATION
+========================================== */
+
+.navbar {
+    min-height: 80px;
+}
+
+.hospital-logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #005b85;
+}
+
+.hospital-logo i {
+    color: #00a3a3;
+    margin-right: 7px;
+}
+
+.navbar-nav .nav-link {
+    color: #263746;
+    font-weight: 500;
+    margin-left: 12px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #007c91;
+}
+
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.btn-primary {
+    background-color: #007c91;
+    border-color: #007c91;
+}
+
+.btn-primary:hover {
+    background-color: #005f70;
+    border-color: #005f70;
+}
+
+.btn-outline-primary {
+    color: #007c91;
+    border-color: #007c91;
+}
+
+.btn-outline-primary:hover {
+    background-color: #007c91;
+    border-color: #007c91;
+}
+
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.hospital-footer {
+    background-color: #003b5c;
+    color: white;
+    padding: 60px 0 25px;
+    margin-top: 80px;
+}
+
+.hospital-footer h4,
+.hospital-footer h5 {
+    margin-bottom: 20px;
+}
+
+.footer-links {
+    padding: 0;
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: #d9edf5;
+}
+
+.footer-links a:hover {
+    color: white;
+}
