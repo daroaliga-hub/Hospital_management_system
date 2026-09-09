@@ -1,0 +1,200 @@
+{% extends 'base.html' %} {% block title %} Patient Portal {% endblock %} 
+{% block content %}
+
+<section class="patient-dashboard">
+  <div class="container">
+    <!-- ================================= -->
+    <!-- WELCOME -->
+    <!-- ================================= -->
+
+    <div class="dashboard-header">
+      <div>
+        <span class="section-small-title"> PATIENT PORTAL </span>
+
+        <h1>Welcome, {{ patient.full_name }}</h1>
+
+        <p>Manage your appointments and healthcare information.</p>
+      </div>
+
+      <div>
+        <a href="{% url 'book_appointment' %}" class="btn btn-primary">
+          <i class="bi bi-calendar-plus"></i>
+
+          Book Appointment
+        </a>
+      </div>
+    </div>
+
+    <!-- ================================= -->
+    <!-- QUICK STATS -->
+    <!-- ================================= -->
+
+    <div class="row g-4 mt-4">
+      <div class="col-md-4">
+        <div class="dashboard-stat">
+          <i class="bi bi-calendar-check"></i>
+
+          <div>
+            <h3>{{ appointments.count }}</h3>
+
+            <p>Total Appointments</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="dashboard-stat">
+          <i class="bi bi-clock-history"></i>
+
+          <div>
+            <h3>{{ upcoming|length }}</h3>
+
+            <p>Upcoming Visits</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="dashboard-stat">
+          <i class="bi bi-check-circle"></i>
+
+          <div>
+            <h3>{{ completed|length }}</h3>
+
+            <p>Completed Visits</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================= -->
+    <!-- UPCOMING APPOINTMENTS -->
+    <!-- ================================= -->
+
+    <div class="dashboard-section mt-5">
+      <div class="section-title-row">
+        <h2>Upcoming Appointments</h2>
+
+        <a href="#appointments"> View All </a>
+      </div>
+
+      {% for appointment in upcoming %}
+
+      <div class="appointment-card">
+        <div class="appointment-icon">
+          <i class="bi bi-person-badge"></i>
+        </div>
+
+        <div class="appointment-details">
+          <h4>Dr. {{ appointment.doctor.name }}</h4>
+
+          <p>{{ appointment.department.name }}</p>
+
+          <p>
+            <i class="bi bi-calendar"></i>
+
+            {{ appointment.date }} &nbsp;
+
+            <i class="bi bi-clock"></i>
+
+            {{ appointment.time }}
+          </p>
+        </div>
+
+        <div>
+          <span class="status {{ appointment.status }}">
+            {{ appointment.status|title }}
+          </span>
+        </div>
+      </div>
+
+      {% empty %}
+
+      <div class="alert alert-info">No upcoming appointments.</div>
+
+      {% endfor %}
+    </div>
+
+    <!-- ================================= -->
+    <!-- QUICK ACTIONS -->
+    <!-- ================================= -->
+
+    <div class="dashboard-section mt-5">
+      <h2>Quick Actions</h2>
+
+      <div class="row g-4 mt-3">
+        <div class="col-md-4">
+          <a href="{% url 'doctor_list' %}" class="dashboard-action">
+            <i class="bi bi-search"></i>
+
+            <h5>Find a Doctor</h5>
+
+            <p>Search healthcare specialists.</p>
+          </a>
+        </div>
+
+        <div class="col-md-4">
+          <a href="{% url 'book_appointment' %}" class="dashboard-action">
+            <i class="bi bi-calendar-plus"></i>
+
+            <h5>Book Appointment</h5>
+
+            <p>Schedule your next visit.</p>
+          </a>
+        </div>
+
+        <div class="col-md-4">
+          <a href="#" class="dashboard-action">
+            <i class="bi bi-person"></i>
+
+            <h5>My Profile</h5>
+
+            <p>Update personal information.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================= -->
+    <!-- APPOINTMENT HISTORY -->
+    <!-- ================================= -->
+
+    <div id="appointments" class="dashboard-section mt-5">
+      <h2>Appointment History</h2>
+
+      <div class="table-responsive mt-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Doctor</th>
+
+              <th>Date</th>
+
+              <th>Time</th>
+
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for appointment in appointments %}
+
+            <tr>
+              <td>Dr. {{ appointment.doctor.name }}</td>
+
+              <td>{{ appointment.date }}</td>
+
+              <td>{{ appointment.time }}</td>
+
+              <td>{{ appointment.status|title }}</td>
+            </tr>
+
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
