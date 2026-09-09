@@ -761,3 +761,70 @@ a {
     }
 
 }
+/* =====================================
+   APPOINTMENT PAGE
+===================================== */
+
+
+.appointment-page {
+
+    background:#f1f8fa;
+
+    padding:80px 0;
+
+}
+
+
+
+.appointment-card {
+
+    background:white;
+
+    padding:45px;
+
+    border-radius:18px;
+
+    box-shadow:
+    0 10px 40px rgba(0,0,0,.08);
+
+}
+
+
+
+.appointment-card h1 {
+
+    color:#143447;
+
+    font-weight:700;
+
+}
+
+
+
+.form-label {
+
+    font-weight:600;
+
+    color:#263746;
+
+}
+
+
+
+.appointment-card input,
+.appointment-card select,
+.appointment-card textarea {
+
+    border-radius:10px;
+
+    padding:12px;
+
+}
+
+
+
+.appointment-card textarea {
+
+    resize:none;
+
+}
