@@ -256,3 +256,57 @@ def user_logout(request):
     logout(request)
     return redirect('home')
 
+@login_required
+def doctor_dashboard(request):
+
+    try:
+
+        doctor = request.user.doctor
+
+
+    except Doctor.DoesNotExist:
+
+        messages.error(
+            request,
+            "You are not registered as a doctor."
+        )
+
+        return redirect('home')
+
+
+
+    appointments = Appointment.objects.filter(
+        doctor=doctor
+    ).order_by(
+        '-date',
+        '-time'
+    )
+
+
+    pending = appointments.filter(
+        status='pending'
+    )
+
+
+    confirmed = appointments.filter(
+        status='confirmed'
+    )
+
+
+    completed = appointments.filter(
+        status='completed'
+    )
+
+
+    return render(
+        request,
+        'doctor/dashboard.html',
+        {
+            'doctor': doctor,
+            'appointments': appointments,
+            'pending': pending,
+            'confirmed': confirmed,
+            'completed': completed,
+        }
+    )
+
