@@ -373,3 +373,186 @@ a {
     }
 
 }
+/* =====================================
+   DOCTOR LIST PAGE
+===================================== */
+
+
+.doctor-header {
+
+    background-color:#f1f8fa;
+
+    padding:80px 0;
+
+}
+
+
+
+.doctor-search-section {
+
+    margin-top:-40px;
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+
+
+.search-box {
+
+    background:white;
+
+    padding:35px;
+
+    border-radius:15px;
+
+    box-shadow:0 10px 35px rgba(0,0,0,0.08);
+
+}
+
+
+
+.doctor-results {
+
+    padding:80px 0;
+
+}
+
+
+
+
+.doctor-card {
+
+    background:white;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+    height:100%;
+
+    border:1px solid #e5e8ea;
+
+    transition:.3s;
+
+}
+
+
+
+.doctor-card:hover {
+
+    transform:translateY(-7px);
+
+    box-shadow:0 15px 35px rgba(0,0,0,.1);
+
+}
+
+
+
+.doctor-image {
+
+    height:280px;
+
+    background:#e8f3f5;
+
+}
+
+
+
+.doctor-image img {
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+}
+
+
+
+.doctor-placeholder {
+
+    height:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+
+
+.doctor-placeholder i {
+
+    font-size:90px;
+
+    color:#007c91;
+
+}
+
+
+
+.doctor-info {
+
+    padding:25px;
+
+}
+
+
+
+.doctor-info h4 {
+
+    color:#143447;
+
+    font-weight:700;
+
+}
+
+
+
+.doctor-specialty {
+
+    color:#007c91;
+
+    font-weight:600;
+
+}
+
+
+
+.doctor-info p {
+
+    font-size:15px;
+
+}
+
+
+
+.doctor-rating {
+
+    display:inline-block;
+
+    background:#fff4c7;
+
+    color:#916800;
+
+    padding:5px 12px;
+
+    border-radius:20px;
+
+    font-weight:600;
+
+}
+
+
+
+.doctor-rating i {
+
+    color:#f5b301;
+
+}
