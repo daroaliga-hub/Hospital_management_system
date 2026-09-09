@@ -16,14 +16,44 @@ def home(request):
 )
 
 def doctor_list(request):
+
     doctors = Doctor.objects.all()
+
+
+    search = request.GET.get(
+        'search'
+    )
+
+    department = request.GET.get(
+        'department'
+    )
+
+
+    if search:
+
+        doctors = doctors.filter(
+            name__icontains=search
+        )
+
+
+    if department:
+
+        doctors = doctors.filter(
+            department__id=department
+        )
+
+
+    departments = Department.objects.all()
+
+
     return render(
-    request,
-    'public/doctor_list.html',
-    {
-        'doctors': doctors
-    }
-)
+        request,
+        'public/doctor_list.html',
+        {
+            'doctors': doctors,
+            'departments': departments
+        }
+    )
 
 def register(request):
     if request.method == 'POST':
