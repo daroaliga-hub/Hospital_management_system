@@ -1,0 +1,102 @@
+{% extends 'base.html' %} {% block title %} Doctor Dashboard {% endblock %} 
+{% block content %}
+
+<section class="doctor-dashboard">
+  <div class="container">
+    <!-- HEADER -->
+
+    <div class="dashboard-header">
+      <div>
+        <span class="section-small-title"> DOCTOR PORTAL </span>
+
+        <h1>Welcome, Dr. {{ doctor.name }}</h1>
+
+        <p>Manage your appointments and patient visits.</p>
+      </div>
+    </div>
+
+    <!-- STATISTICS -->
+
+    <div class="row g-4 mt-4">
+      <div class="col-md-4">
+        <div class="dashboard-stat">
+          <i class="bi bi-hourglass-split"></i>
+
+          <div>
+            <h3>{{ pending.count }}</h3>
+
+            <p>Pending Requests</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="dashboard-stat">
+          <i class="bi bi-calendar-check"></i>
+
+          <div>
+            <h3>{{ confirmed.count }}</h3>
+
+            <p>Confirmed Visits</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="dashboard-stat">
+          <i class="bi bi-check-circle"></i>
+
+          <div>
+            <h3>{{ completed.count }}</h3>
+
+            <p>Completed</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPOINTMENTS -->
+
+    <div class="dashboard-section mt-5">
+      <h2>Patient Appointments</h2>
+
+      {% for appointment in appointments %}
+
+      <div class="doctor-appointment-card">
+        <div>
+          <h4>{{ appointment.patient.full_name }}</h4>
+
+          <p>
+            <i class="bi bi-calendar"></i>
+
+            {{ appointment.date }}
+          </p>
+
+          <p>
+            <i class="bi bi-clock"></i>
+
+            {{ appointment.time }}
+          </p>
+
+          <p>
+            Symptoms: {{ appointment.symptoms|default:"No symptoms provided" }}
+          </p>
+        </div>
+
+        <div>
+          <span class="status {{ appointment.status }}">
+            {{ appointment.status|title }}
+          </span>
+        </div>
+      </div>
+
+      {% empty %}
+
+      <div class="alert alert-info">No appointments yet.</div>
+
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}
