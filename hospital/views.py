@@ -7,11 +7,23 @@ from .forms import PatientRegistrationForm, AppointmentForm
 
 def home(request):
     departments = Department.objects.all()[:6]
-    return render(request, 'home.html', {'departments': departments})
+    return render(
+    request,
+    'public/home.html',
+    {
+        'departments': departments
+    }
+)
 
 def doctor_list(request):
     doctors = Doctor.objects.all()
-    return render(request, 'doctor_list.html', {'doctors': doctors})
+    return render(
+    request,
+    'public/doctor_list.html',
+    {
+        'doctors': doctors
+    }
+)
 
 def register(request):
     if request.method == 'POST':
@@ -24,7 +36,13 @@ def register(request):
             return redirect('dashboard')
     else:
         form = PatientRegistrationForm()
-    return render(request, 'register.html', {'form': form})
+    return render(
+    request,
+    'authentication/register.html',
+    {
+        'form': form
+    }
+)
 
 def user_login(request):
     if request.method == 'POST':
@@ -35,7 +53,10 @@ def user_login(request):
             login(request, user)
             return redirect('dashboard')
         messages.error(request, "Invalid credentials")
-    return render(request, 'login.html')
+    return render(
+    request,
+    'authentication/login.html'
+)
 
 @login_required
 def dashboard(request):
@@ -43,7 +64,13 @@ def dashboard(request):
         appointments = Appointment.objects.filter(patient=request.user.patient).order_by('-date')
     else:
         appointments = []
-    return render(request, 'dashboard.html', {'appointments': appointments})
+    return render(
+    request,
+    'patient/dashboard.html',
+    {
+        'appointments': appointments
+    }
+)
 
 @login_required
 def book_appointment(request):
