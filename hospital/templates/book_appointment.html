@@ -1,184 +1,58 @@
-{% extends 'base.html' %}
-
-
-{% block title %}
-
-Book Appointment
-
-{% endblock %}
-
-
-
-
-{% block content %}
-
+{% extends 'base.html' %} {% block title %} Book Appointment {% endblock %} 
+{%block content %}
 
 <section class="appointment-page">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="appointment-card">
+          <div class="text-center mb-4">
+            <span class="section-small-title"> APPOINTMENT </span>
 
+            <h1 class="mt-2">Book Your Appointment</h1>
 
-<div class="container">
+            <p>Schedule a visit with one of our healthcare specialists.</p>
+          </div>
 
+          <form method="POST">
+            {% csrf_token %}
 
-<div class="row justify-content-center">
+            <div class="row g-4">
+              <div class="col-md-12">
+                <label class="form-label"> Doctor </label>
 
+                {{ form.doctor }}
+              </div>
 
-<div class="col-lg-8">
+              <div class="col-md-6">
+                <label class="form-label"> Date </label>
 
+                {{ form.date }}
+              </div>
 
-<div class="appointment-card">
+              <div class="col-md-6">
+                <label class="form-label"> Time </label>
 
+                {{ form.time }}
+              </div>
 
-<div class="text-center mb-4">
+              <div class="col-12">
+                <label class="form-label"> Symptoms </label>
 
+                {{ form.symptoms }}
+              </div>
+            </div>
 
-<span class="section-small-title">
+            <button class="btn btn-primary btn-lg w-100 mt-4">
+              <i class="bi bi-calendar-check"></i>
 
-APPOINTMENT
-
-</span>
-
-
-<h1 class="mt-2">
-
-Book Your Appointment
-
-</h1>
-
-
-<p>
-
-Schedule a visit with one of our healthcare specialists.
-
-</p>
-
-
-</div>
-
-
-
-
-
-<form method="POST">
-
-
-{% csrf_token %}
-
-
-
-<div class="row g-4">
-
-
-<div class="col-md-12">
-
-
-<label class="form-label">
-
-Doctor
-
-</label>
-
-
-{{ form.doctor }}
-
-
-</div>
-
-
-
-
-<div class="col-md-6">
-
-
-<label class="form-label">
-
-Date
-
-</label>
-
-
-{{ form.date }}
-
-
-</div>
-
-
-
-
-
-<div class="col-md-6">
-
-
-<label class="form-label">
-
-Time
-
-</label>
-
-
-{{ form.time }}
-
-
-</div>
-
-
-
-
-
-<div class="col-12">
-
-
-<label class="form-label">
-
-Symptoms
-
-</label>
-
-
-{{ form.symptoms }}
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-<button
-
-class="btn btn-primary btn-lg w-100 mt-4"
-
->
-
-
-<i class="bi bi-calendar-check"></i>
-
-
-Confirm Appointment
-
-
-</button>
-
-
-
-</form>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
+              Confirm Appointment
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
-
 
 {% endblock %}

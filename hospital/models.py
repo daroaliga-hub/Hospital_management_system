@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -120,6 +121,16 @@ class Appointment(models.Model):
     notes = models.TextField(
         blank=True
     )
+    def save(self, *args, **kwargs):
+
+        if not self.appointment_number:
+            
+            self.appointment_number = (
+                str(uuid.uuid4())[:8].upper()
+            )
+
+        super().save(*args, **kwargs)
+
     
     def __str__(self):
         return f"{self.patient} with Dr. {self.doctor} on {self.date}"
