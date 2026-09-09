@@ -54,7 +54,22 @@ def doctor_list(request):
             'departments': departments
         }
     )
+def doctor_profile(request, id):
 
+    doctor = get_object_or_404(
+        Doctor,
+        id=id
+    )
+
+
+    return render(
+        request,
+        'public/doctor_profile.html',
+        {
+            'doctor': doctor
+        }
+    )
+    
 def register(request):
     if request.method == 'POST':
         form = PatientRegistrationForm(request.POST)
