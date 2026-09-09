@@ -129,7 +129,7 @@ Dr. {{ doctor.name }} | CarePoint Hospital
                 <div class="mt-4">
 
                     <a
-                        href="{% url 'book_appointment' %}"
+                        href="{% url 'book_appointment' %}?doctor={{ doctor.id }}"
                         class="btn btn-primary btn-lg"
                     >
 
