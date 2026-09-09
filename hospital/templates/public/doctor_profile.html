@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Dr. {{ doctor.name }} | CarePoint Hospital
+{% endblock %}
+
+
+{% block content %}
+
+<!-- ========================================= -->
+<!-- DOCTOR PROFILE HEADER -->
+<!-- ========================================= -->
+
+<section class="doctor-profile-header">
+
+    <div class="container">
+
+        <div class="row align-items-center g-5">
+
+            <!-- Doctor Image -->
+
+            <div class="col-lg-4">
+
+                <div class="doctor-profile-image">
+
+                    {% if doctor.image %}
+
+                        <img
+                            src="{{ doctor.image.url }}"
+                            alt="Dr. {{ doctor.name }}"
+                        >
+
+                    {% else %}
+
+                        <div class="doctor-profile-placeholder">
+
+                            <i class="bi bi-person"></i>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- Doctor Information -->
+
+            <div class="col-lg-8">
+
+                <span class="section-small-title">
+                    OUR PHYSICIAN
+                </span>
+
+                <h1 class="display-5 fw-bold mt-2">
+
+                    Dr. {{ doctor.name }}
+
+                </h1>
+
+
+                <h4 class="doctor-profile-specialty">
+
+                    {{ doctor.department.name }}
+
+                </h4>
+
+
+                <div class="doctor-profile-rating mt-3">
+
+                    <i class="bi bi-star-fill"></i>
+
+                    {{ doctor.rating }}
+
+                </div>
+
+
+                <p class="lead mt-4">
+
+                    {{ doctor.qualification }}
+
+                </p>
+
+
+                <div class="doctor-profile-details">
+
+                    <div>
+
+                        <i class="bi bi-clock-history"></i>
+
+                        <strong>
+                            {{ doctor.experience }}
+                        </strong>
+
+                        years of experience
+
+                    </div>
+
+
+                    {% if doctor.location %}
+
+                    <div>
+
+                        <i class="bi bi-geo-alt"></i>
+
+                        {{ doctor.location }}
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if doctor.languages %}
+
+                    <div>
+
+                        <i class="bi bi-translate"></i>
+
+                        {{ doctor.languages }}
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="mt-4">
+
+                    <a
+                        href="{% url 'book_appointment' %}"
+                        class="btn btn-primary btn-lg"
+                    >
+
+                        <i class="bi bi-calendar-check"></i>
+
+                        Book an Appointment
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ========================================= -->
+<!-- DOCTOR INFORMATION -->
+<!-- ========================================= -->
+
+<section class="section-padding">
+
+    <div class="container">
+
+        <div class="row g-5">
+
+            <!-- Main Information -->
+
+            <div class="col-lg-8">
+
+                <div class="profile-section">
+
+                    <span class="section-small-title">
+                        ABOUT THE DOCTOR
+                    </span>
+
+                    <h2 class="mt-2">
+                        About Dr. {{ doctor.name }}
+                    </h2>
+
+
+                    {% if doctor.bio %}
+
+                        <p class="mt-3">
+
+                            {{ doctor.bio }}
+
+                        </p>
+
+                    {% else %}
+
+                        <p class="mt-3">
+
+                            Dr. {{ doctor.name }} is a healthcare
+                            professional specializing in
+                            {{ doctor.department.name }}.
+
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+
+                <!-- Qualifications -->
+
+                <div class="profile-section mt-5">
+
+                    <h3>
+                        Qualifications & Experience
+                    </h3>
+
+
+                    <div class="profile-information-card mt-3">
+
+                        <div class="profile-info-row">
+
+                            <i class="bi bi-mortarboard"></i>
+
+                            <div>
+
+                                <strong>
+                                    Qualification
+                                </strong>
+
+                                <p>
+                                    {{ doctor.qualification }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="profile-info-row">
+
+                            <i class="bi bi-award"></i>
+
+                            <div>
+
+                                <strong>
+                                    Experience
+                                </strong>
+
+                                <p>
+                                    {{ doctor.experience }}
+                                    years
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Availability -->
+
+                <div class="profile-section mt-5">
+
+                    <h3>
+                        Availability
+                    </h3>
+
+
+                    <div class="availability-card mt-3">
+
+                        <i class="bi bi-calendar-week"></i>
+
+
+                        <div>
+
+                            <strong>
+                                Available Days
+                            </strong>
+
+                            {% if doctor.available_days %}
+
+                                <p>
+                                    {{ doctor.available_days }}
+                                </p>
+
+                            {% else %}
+
+                                <p>
+                                    Contact the hospital for
+                                    current availability.
+                                </p>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Appointment Sidebar -->
+
+            <div class="col-lg-4">
+
+                <div class="appointment-sidebar">
+
+                    <h4>
+                        Schedule an Appointment
+                    </h4>
+
+
+                    <p>
+                        Book an appointment with
+                        Dr. {{ doctor.name }}.
+                    </p>
+
+
+                    <hr>
+
+
+                    <div class="appointment-sidebar-item">
+
+                        <i class="bi bi-building"></i>
+
+                        <div>
+
+                            <small>
+                                Department
+                            </small>
+
+                            <strong>
+                                {{ doctor.department.name }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="appointment-sidebar-item">
+
+                        <i class="bi bi-cash"></i>
+
+                        <div>
+
+                            <small>
+                                Consultation Fee
+                            </small>
+
+                            <strong>
+                                ${{ doctor.fee }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <a
+                        href="{% url 'book_appointment' %}"
+                        class="btn btn-primary w-100 mt-4"
+                    >
+
+                        Book Appointment
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ========================================= -->
+<!-- BACK TO DOCTORS -->
+<!-- ========================================= -->
+
+<section class="doctor-profile-footer">
+
+    <div class="container text-center">
+
+        <a
+            href="{% url 'doctor_list' %}"
+            class="btn btn-outline-primary"
+        >
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back to Doctors
+
+        </a>
+
+    </div>
+
+</section>
+
+
+{% endblock %}
