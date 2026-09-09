@@ -1119,3 +1119,74 @@ a {
 
 
 }
+/* =====================================
+   DOCTOR DASHBOARD
+===================================== */
+
+
+.doctor-dashboard {
+
+    background:#f6f9fa;
+
+    padding:70px 0;
+
+}
+
+
+
+.doctor-appointment-card {
+
+
+background:white;
+
+
+border-radius:15px;
+
+
+padding:25px;
+
+
+margin-top:20px;
+
+
+display:flex;
+
+
+justify-content:space-between;
+
+
+align-items:center;
+
+
+border:1px solid #e5e8eb;
+
+
+}
+
+
+
+.doctor-appointment-card h4 {
+
+    color:#143447;
+
+    font-weight:700;
+
+}
+
+
+
+.doctor-appointment-card p {
+
+    margin-bottom:8px;
+
+}
+
+
+
+.doctor-appointment-card i {
+
+    color:#007c91;
+
+    margin-right:8px;
+
+}
