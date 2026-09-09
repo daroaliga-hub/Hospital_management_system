@@ -1,0 +1,564 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home | CarePoint Hospital
+{% endblock %}
+
+
+{% block content %}
+
+<!-- ======================================= -->
+<!-- HERO -->
+<!-- ======================================= -->
+
+<section class="hero-section">
+
+    <div class="container">
+
+        <div class="row align-items-center min-vh-75">
+
+            <div class="col-lg-6">
+
+                <span class="hero-label">
+                    Advanced medicine. Compassionate care.
+                </span>
+
+                <h1 class="display-3 fw-bold mt-3">
+                    Your health deserves
+                    exceptional care.
+                </h1>
+
+                <p class="lead mt-4">
+                    Find experienced doctors, explore our medical
+                    specialties and schedule your care.
+                </p>
+
+
+                <div class="hero-buttons mt-4">
+
+                    <a
+                        href="{% url 'doctor_list' %}"
+                        class="btn btn-primary btn-lg me-2 mb-2"
+                    >
+
+                        <i class="bi bi-search"></i>
+
+                        Find a Doctor
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'book_appointment' %}"
+                        class="btn btn-outline-primary btn-lg mb-2"
+                    >
+
+                        <i class="bi bi-calendar-check"></i>
+
+                        Request Appointment
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-6 mt-5 mt-lg-0">
+
+                <div class="hero-placeholder">
+
+                    <i class="bi bi-hospital"></i>
+
+                    <p>
+                        Hospital image will go here
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================= -->
+<!-- QUICK ACTIONS -->
+<!-- ======================================= -->
+
+<section class="quick-actions">
+
+    <div class="container">
+
+        <div class="row g-3">
+
+            <div class="col-md-6 col-lg-3">
+
+                <a
+                    href="{% url 'doctor_list' %}"
+                    class="quick-action-card"
+                >
+
+                    <i class="bi bi-person-badge"></i>
+
+                    <div>
+
+                        <h5>Find a Doctor</h5>
+
+                        <p>
+                            Search our medical specialists.
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3">
+
+                <a
+                    href="{% url 'book_appointment' %}"
+                    class="quick-action-card"
+                >
+
+                    <i class="bi bi-calendar2-check"></i>
+
+                    <div>
+
+                        <h5>Appointments</h5>
+
+                        <p>
+                            Schedule your next visit.
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3">
+
+                <a
+                    href="{% url 'login' %}"
+                    class="quick-action-card"
+                >
+
+                    <i class="bi bi-person-circle"></i>
+
+                    <div>
+
+                        <h5>Patient Portal</h5>
+
+                        <p>
+                            Manage your healthcare.
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3">
+
+                <a
+                    href="#locations"
+                    class="quick-action-card"
+                >
+
+                    <i class="bi bi-geo-alt"></i>
+
+                    <div>
+
+                        <h5>Locations</h5>
+
+                        <p>
+                            Find care near you.
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================= -->
+<!-- DEPARTMENTS / SPECIALTIES -->
+<!-- ======================================= -->
+
+<section
+    id="services"
+    class="section-padding"
+>
+
+    <div class="container">
+
+        <div class="section-heading text-center">
+
+            <span>OUR SPECIALTIES</span>
+
+            <h2>
+                Expert care across medical specialties
+            </h2>
+
+            <p>
+                Explore our departments and find the right
+                medical team for your needs.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4 mt-4">
+
+            {% for department in departments %}
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="department-card">
+
+                        <div class="department-icon">
+
+                            <i class="bi bi-heart-pulse"></i>
+
+                        </div>
+
+                        <h4>
+                            {{ department.name }}
+                        </h4>
+
+                        <p>
+                            {{ department.description|default:"Specialized medical care provided by experienced healthcare professionals."|truncatewords:20 }}
+                        </p>
+
+                        <a href="{% url 'doctor_list' %}">
+
+                            Find specialists
+
+                            <i class="bi bi-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <div class="col-12">
+
+                    <div class="alert alert-info">
+
+                        No departments have been added yet.
+
+                        Add departments through the Django
+                        admin panel.
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================= -->
+<!-- WHY CHOOSE US -->
+<!-- ======================================= -->
+
+<section class="why-us">
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-6">
+
+                <span class="section-small-title">
+                    WHY CAREPOINT
+                </span>
+
+                <h2 class="display-6 fw-bold mt-2">
+                    Healthcare centered around you
+                </h2>
+
+                <p class="lead">
+                    Our goal is to connect patients with the
+                    right care, doctor and medical service.
+                </p>
+
+
+                <div class="row mt-4">
+
+                    <div class="col-sm-6 mb-4">
+
+                        <h3>100+</h3>
+
+                        <p>
+                            Medical professionals
+                        </p>
+
+                    </div>
+
+
+                    <div class="col-sm-6 mb-4">
+
+                        <h3>20+</h3>
+
+                        <p>
+                            Medical specialties
+                        </p>
+
+                    </div>
+
+
+                    <div class="col-sm-6 mb-4">
+
+                        <h3>24/7</h3>
+
+                        <p>
+                            Emergency support
+                        </p>
+
+                    </div>
+
+
+                    <div class="col-sm-6 mb-4">
+
+                        <h3>10K+</h3>
+
+                        <p>
+                            Patients served
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-6">
+
+                <div class="feature-box">
+
+                    <div class="feature-item">
+
+                        <i class="bi bi-person-check"></i>
+
+                        <div>
+
+                            <h5>
+                                Expert Physicians
+                            </h5>
+
+                            <p>
+                                Connect with doctors across
+                                different medical specialties.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature-item">
+
+                        <i class="bi bi-calendar-check"></i>
+
+                        <div>
+
+                            <h5>
+                                Easy Appointments
+                            </h5>
+
+                            <p>
+                                Request and manage appointments
+                                from your patient account.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature-item">
+
+                        <i class="bi bi-shield-check"></i>
+
+                        <div>
+
+                            <h5>
+                                Patient Focused
+                            </h5>
+
+                            <p>
+                                Your healthcare information and
+                                appointments in one place.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================= -->
+<!-- LOCATION -->
+<!-- ======================================= -->
+
+<section
+    id="locations"
+    class="section-padding"
+>
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-6">
+
+                <span class="section-small-title">
+                    FIND CARE
+                </span>
+
+                <h2 class="display-6 fw-bold">
+                    Find a location near you
+                </h2>
+
+                <p class="lead">
+                    Access hospital services, specialists and
+                    healthcare facilities from convenient
+                    locations.
+                </p>
+
+
+                <div class="location-search mt-4">
+
+                    <div class="input-group input-group-lg">
+
+                        <span class="input-group-text">
+
+                            <i class="bi bi-search"></i>
+
+                        </span>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="City, ZIP code or location"
+                        >
+
+                        <button class="btn btn-primary">
+                            Search
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-6 mt-4 mt-lg-0">
+
+                <div class="location-placeholder">
+
+                    <i class="bi bi-map"></i>
+
+                    <h4>
+                        Hospital Locations
+                    </h4>
+
+                    <p>
+                        Location directory will be connected
+                        here later.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================= -->
+<!-- APPOINTMENT CTA -->
+<!-- ======================================= -->
+
+<section class="appointment-cta">
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+
+                <h2>
+                    Ready to schedule your care?
+                </h2>
+
+                <p>
+                    Request an appointment with one of our
+                    healthcare professionals.
+                </p>
+
+            </div>
+
+
+            <div class="col-lg-4 text-lg-end">
+
+                <a
+                    href="{% url 'book_appointment' %}"
+                    class="btn btn-light btn-lg"
+                >
+                    Request Appointment
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
