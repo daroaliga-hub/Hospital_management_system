@@ -12,16 +12,71 @@ class Department(models.Model):
 
 
 class Doctor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=100)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
-    qualification = models.CharField(max_length=200)
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+
+    name = models.CharField(
+        max_length=100
+    )
+
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.CASCADE
+    )
+
+    qualification = models.CharField(
+        max_length=200
+    )
+
     experience = models.PositiveIntegerField()
-    fee = models.DecimalField(max_digits=8, decimal_places=2)
-    image = models.ImageField(upload_to='doctors/', blank=True, null=True)
-    bio = models.TextField(blank=True)
+
+    fee = models.DecimalField(
+        max_digits=8,
+        decimal_places=2
+    )
+
+    image = models.ImageField(
+        upload_to='doctors/',
+        blank=True,
+        null=True
+    )
+
+    bio = models.TextField(
+        blank=True
+    )
+
+
+    # New fields
+
+    location = models.CharField(
+        max_length=200,
+        blank=True
+    )
+
+    languages = models.CharField(
+        max_length=200,
+        blank=True
+    )
+
+    available_days = models.CharField(
+        max_length=200,
+        blank=True
+    )
+
+    rating = models.DecimalField(
+        max_digits=2,
+        decimal_places=1,
+        default=5.0
+    )
+
 
     def __str__(self):
+
         return f"Dr. {self.name} ({self.department})"
 
 
