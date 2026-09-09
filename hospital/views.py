@@ -120,12 +120,17 @@ def dashboard(request):
 @login_required
 def book_appointment(request):
 
-    selected_doctor = request.GET.get('doctor')
+    selected_doctor = request.GET.get(
+        'doctor'
+    )
 
 
     if request.method == 'POST':
 
-        form = AppointmentForm(request.POST)
+        form = AppointmentForm(
+            request.POST
+        )
+
 
         if form.is_valid():
 
@@ -133,39 +138,83 @@ def book_appointment(request):
                 commit=False
             )
 
-            appointment.patient = request.user.patient
+
+            appointment.patient = (
+                request.user.patient
+            )
+
 
             appointment.department = (
                 appointment.doctor.department
             )
 
-            appointment.save()
 
-            messages.success(
-                request,
-                "Appointment booked successfully!"
-            )
+            existing = Appointment.objects.filter(
 
-            return redirect('dashboard')
+                doctor=appointment.doctor,
+
+                date=appointment.date,
+
+                time=appointment.time,
+
+                status__in=[
+                    'pending',
+                    'confirmed'
+                ]
+
+            ).exists()
+
+
+
+            if existing:
+
+                messages.error(
+                    request,
+                    "This doctor is not available at this time."
+                )
+
+
+            else:
+
+                appointment.save()
+
+
+                messages.success(
+                    request,
+                    "Appointment booked successfully!"
+                )
+
+
+                return redirect(
+                    'dashboard'
+                )
+
+
 
     else:
 
         form = AppointmentForm()
 
 
+
         if selected_doctor:
 
-            form.fields['doctor'].initial = (
-                selected_doctor
-            )
+            form.fields[
+                'doctor'
+            ].initial = selected_doctor
+
 
 
     return render(
+
         request,
+
         'book_appointment.html',
+
         {
             'form': form
         }
+
     )
 
 @login_required
