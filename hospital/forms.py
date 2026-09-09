@@ -11,10 +11,51 @@ class PatientRegistrationForm(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2']
 
 class AppointmentForm(forms.ModelForm):
+
     class Meta:
+
         model = Appointment
-        fields = ['doctor', 'date', 'time', 'symptoms']
+
+        fields = [
+            'doctor',
+            'date',
+            'time',
+            'symptoms'
+        ]
+
+
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}),
-            'time': forms.TimeInput(attrs={'type': 'time'}),
+
+            'date': forms.DateInput(
+                attrs={
+                    'type': 'date',
+                    'class': 'form-control'
+                }
+            ),
+
+
+            'time': forms.TimeInput(
+                attrs={
+                    'type': 'time',
+                    'class': 'form-control'
+                }
+            ),
+
+
+            'symptoms': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'rows': 5,
+                    'placeholder':
+                    'Describe your symptoms...'
+                }
+            ),
+
+
+            'doctor': forms.Select(
+                attrs={
+                    'class': 'form-select'
+                }
+            )
+
         }
