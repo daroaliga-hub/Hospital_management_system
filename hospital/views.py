@@ -105,17 +105,46 @@ def user_login(request):
 
 @login_required
 def dashboard(request):
-    if hasattr(request.user, 'patient'):
-        appointments = Appointment.objects.filter(patient=request.user.patient).order_by('-date')
-    else:
-        appointments = []
+
+    patient, created = Patient.objects.get_or_create(
+        user=request.user,
+        defaults={
+            "full_name": request.user.username
+        }
+    )
+
+
+    appointments = Appointment.objects.filter(
+        patient=patient
+    ).order_by(
+        '-date',
+        '-time'
+    )
+
+
+    upcoming = appointments.filter(
+        status__in=[
+            'pending',
+            'confirmed'
+        ]
+    )[:3]
+
+
+    completed = appointments.filter(
+        status='completed'
+    )[:5]
+
+
     return render(
-    request,
-    'patient/dashboard.html',
-    {
-        'appointments': appointments
-    }
-)
+        request,
+        'patient/dashboard.html',
+        {
+            'patient': patient,
+            'appointments': appointments,
+            'upcoming': upcoming,
+            'completed': completed
+        }
+    )
 
 @login_required
 def book_appointment(request):
@@ -139,9 +168,14 @@ def book_appointment(request):
             )
 
 
-            appointment.patient = (
-                request.user.patient
+            patient, created = Patient.objects.get_or_create(
+                user=request.user,
+                defaults={
+                    "full_name": request.user.username
+                }
             )
+
+            appointment.patient = patient
 
 
             appointment.department = (
