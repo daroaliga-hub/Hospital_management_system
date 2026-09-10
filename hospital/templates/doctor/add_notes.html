@@ -1,0 +1,28 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container py-5">
+  <div class="card p-4">
+    <h2>Medical Notes</h2>
+
+    <h5>Patient: {{ appointment.patient.full_name }}</h5>
+
+    <p>Appointment: {{ appointment.date }} {{ appointment.time }}</p>
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <textarea
+        name="medical_notes"
+        class="form-control"
+        rows="8"
+        placeholder="Enter consultation notes..."
+      >
+{{ appointment.medical_notes }}</textarea
+      >
+
+      <button class="btn btn-primary mt-3">Save Notes</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
