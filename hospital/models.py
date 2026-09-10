@@ -110,7 +110,9 @@ class Appointment(models.Model):
     symptoms = models.TextField(blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
-
+    medical_notes = models.TextField(blank=True)
+    
+    
     appointment_number = models.CharField(
     max_length=20,
     unique=True,
