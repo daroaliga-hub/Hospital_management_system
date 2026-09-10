@@ -310,3 +310,63 @@ def doctor_dashboard(request):
         }
     )
 
+@login_required
+def update_appointment_status(request, appointment_id, status):
+
+    appointment = get_object_or_404(
+        Appointment,
+        id=appointment_id
+    )
+
+
+    try:
+
+        doctor = request.user.doctor
+
+    except Doctor.DoesNotExist:
+
+        messages.error(
+            request,
+            "Doctor account required."
+        )
+
+        return redirect('home')
+
+
+
+    # Security check
+
+    if appointment.doctor != doctor:
+
+        messages.error(
+            request,
+            "You cannot modify this appointment."
+        )
+
+        return redirect(
+            'doctor_dashboard'
+        )
+
+
+
+    if status in [
+        'confirmed',
+        'cancelled',
+        'completed'
+    ]:
+
+        appointment.status = status
+
+        appointment.save()
+
+
+        messages.success(
+            request,
+            f"Appointment {status}."
+        )
+
+
+
+    return redirect(
+        'doctor_dashboard'
+    )
