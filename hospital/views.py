@@ -99,8 +99,9 @@ def user_login(request):
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user:
-            login(request, user)
-            return redirect('dashboard')
+            login(request,user)
+            return login_redirect(request)
+
         messages.error(request, "Invalid credentials")
     return render(
     request,
