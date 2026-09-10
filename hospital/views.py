@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from .decorators import doctor_required, patient_required
 from .models import Department, Doctor, Patient, Appointment
 from .forms import PatientRegistrationForm, AppointmentForm
 
@@ -257,6 +258,7 @@ def user_logout(request):
     return redirect('home')
 
 @login_required
+@doctor_required
 def doctor_dashboard(request):
 
     try:
