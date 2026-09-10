@@ -418,3 +418,26 @@ def add_medical_notes(request, appointment_id):
             'appointment': appointment
         }
     )
+def login_redirect(request):
+
+    if request.user.groups.filter(
+        name="Doctor"
+    ).exists():
+
+        return redirect(
+            'doctor_dashboard'
+        )
+
+
+    if request.user.groups.filter(
+        name="Patient"
+    ).exists():
+
+        return redirect(
+            'dashboard'
+        )
+
+
+    return redirect(
+        'home'
+    )
