@@ -105,6 +105,7 @@ def user_login(request):
 )
 
 @login_required
+@patient_required
 def dashboard(request):
 
     patient, created = Patient.objects.get_or_create(
