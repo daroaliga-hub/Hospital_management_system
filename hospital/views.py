@@ -149,6 +149,7 @@ def dashboard(request):
     )
 
 @login_required
+@patient_required
 def book_appointment(request):
 
     selected_doctor = request.GET.get(
