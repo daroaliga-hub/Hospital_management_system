@@ -1,5 +1,5 @@
-{% extends 'base.html' %} {% block title %} Doctor Dashboard {% endblock %} 
-{% block content %}
+{% extends 'base.html' %} {% block title %} Doctor Dashboard {% endblock %} {%
+block content %}
 
 <section class="doctor-dashboard">
   <div class="container">
@@ -87,7 +87,16 @@
           <span class="status {{ appointment.status }}">
             {{ appointment.status|title }}
           </span>
+          {% if appointment.status == 'confirmed' or appointment.status =='completed' %}
 
+          <a
+            href="{% url 'add_medical_notes' appointment.id %}"
+            class="btn btn-outline-primary btn-sm mt-2"
+          >
+            Medical Notes
+          </a>
+
+          {% endif %}
           <div class="mt-3">
             {% if appointment.status == 'pending' %}
 
