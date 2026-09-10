@@ -3,6 +3,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .decorators import doctor_required, patient_required
+from django.contrib.auth.models import Group
 from .models import Department, Doctor, Patient, Appointment
 from .forms import PatientRegistrationForm, AppointmentForm
 
@@ -76,6 +77,8 @@ def register(request):
         form = PatientRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            patient_group = Group.objects.get(name="Patient")
+            user.groups.add(patient_group)          
             Patient.objects.create(user=user, full_name=user.username)
             login(request, user)
             messages.success(request, "Registration successful!")
