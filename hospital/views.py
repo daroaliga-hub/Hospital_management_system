@@ -370,3 +370,44 @@ def update_appointment_status(request, appointment_id, status):
     return redirect(
         'doctor_dashboard'
     )
+@login_required
+def add_medical_notes(request, appointment_id):
+
+    appointment = get_object_or_404(
+        Appointment,
+        id=appointment_id
+    )
+
+
+    if request.method == "POST":
+
+        notes = request.POST.get(
+            "medical_notes"
+        )
+
+
+        appointment.medical_notes = notes
+
+        appointment.status = "completed"
+
+        appointment.save()
+
+
+        messages.success(
+            request,
+            "Medical notes saved."
+        )
+
+
+        return redirect(
+            'doctor_dashboard'
+        )
+
+
+    return render(
+        request,
+        'doctor/add_notes.html',
+        {
+            'appointment': appointment
+        }
+    )
