@@ -4,11 +4,110 @@ from django.contrib.auth.models import User
 from .models import Appointment, Patient ,Doctor , Department
 
 class PatientRegistrationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
+
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Email address'
+            }
+        )
+    )
+
+    full_name = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Full name'
+            }
+        )
+    )
+
+    date_of_birth = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                'type': 'date',
+                'class': 'form-control'
+            }
+        )
+    )
+
+    gender = forms.ChoiceField(
+        choices=Patient._meta.get_field(
+            'gender'
+        ).choices,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-select'
+            }
+        )
+    )
+
+    phone = forms.CharField(
+        max_length=15,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Phone number'
+            }
+        )
+    )
+
+    address = forms.CharField(
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Home address'
+            }
+        )
+    )
+
+    blood_group = forms.CharField(
+        max_length=10,
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Example: O+'
+            }
+        )
+    )
+
 
     class Meta:
+
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+
+        fields = [
+            'username',
+            'email',
+            'password1',
+            'password2',
+        ]
+
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        self.fields['username'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Username'
+        })
+
+        self.fields['password1'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Password'
+        })
+
+        self.fields['password2'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Confirm password'
+        })
 
 class AppointmentForm(forms.ModelForm):
 

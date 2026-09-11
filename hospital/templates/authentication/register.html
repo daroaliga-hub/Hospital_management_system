@@ -1,28 +1,226 @@
-<form method="POST">
+{% extends 'base.html' %}
 
-    {% csrf_token %}
 
-    {% if form.errors %}
+{% block title %}
+Patient Registration | CarePoint
+{% endblock %}
 
-        <div class="alert alert-danger">
 
-            <strong>
-                Please correct the following errors:
-            </strong>
+{% block content %}
 
-            {{ form.errors }}
+<section class="registration-page">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+
+                <div class="registration-card">
+
+                    <div class="text-center mb-5">
+
+                        <span class="section-small-title">
+                            PATIENT PORTAL
+                        </span>
+
+                        <h1 class="mt-2">
+                            Create Your Account
+                        </h1>
+
+                        <p>
+                            Register to manage appointments
+                            and your healthcare information.
+                        </p>
+
+                    </div>
+
+
+                    {% if form.errors %}
+
+                        <div class="alert alert-danger">
+
+                            <strong>
+                                Please correct the errors below.
+                            </strong>
+
+                            {{ form.errors }}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        <!-- ACCOUNT INFORMATION -->
+
+                        <h4 class="registration-section-title">
+                            Account Information
+                        </h4>
+
+
+                        <div class="row g-4">
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Username
+                                </label>
+
+                                {{ form.username }}
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Email
+                                </label>
+
+                                {{ form.email }}
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Password
+                                </label>
+
+                                {{ form.password1 }}
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Confirm Password
+                                </label>
+
+                                {{ form.password2 }}
+
+                            </div>
+
+                        </div>
+
+
+                        <hr class="my-5">
+
+
+                        <!-- PATIENT INFORMATION -->
+
+                        <h4 class="registration-section-title">
+                            Patient Information
+                        </h4>
+
+
+                        <div class="row g-4">
+
+                            <div class="col-md-12">
+
+                                <label class="form-label">
+                                    Full Name
+                                </label>
+
+                                {{ form.full_name }}
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Date of Birth
+                                </label>
+
+                                {{ form.date_of_birth }}
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Gender
+                                </label>
+
+                                {{ form.gender }}
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Phone Number
+                                </label>
+
+                                {{ form.phone }}
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Blood Group
+                                </label>
+
+                                {{ form.blood_group }}
+
+                            </div>
+
+
+                            <div class="col-12">
+
+                                <label class="form-label">
+                                    Address
+                                </label>
+
+                                {{ form.address }}
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-lg w-100 mt-5"
+                        >
+                            <i class="bi bi-person-plus"></i>
+
+                            Create Patient Account
+                        </button>
+
+
+                        <div class="text-center mt-4">
+
+                            Already have an account?
+
+                            <a href="{% url 'login' %}">
+                                Login
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
 
         </div>
 
-    {% endif %}
+    </div>
 
-    {{ form.as_p }}
+</section>
 
-    <button
-        type="submit"
-        class="btn btn-primary"
-    >
-        Register
-    </button>
-
-</form>
+{% endblock %}

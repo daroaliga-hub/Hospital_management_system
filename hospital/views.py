@@ -76,37 +76,115 @@ def doctor_profile(request, id):
     )
     
 def register(request):
+
+    if request.user.is_authenticated:
+        return login_redirect(request)
+
+
     if request.method == 'POST':
-        form = PatientRegistrationForm(request.POST)
+
+        form = PatientRegistrationForm(
+            request.POST
+        )
+
+
         if form.is_valid():
-            user = form.save()       
-            Patient.objects.create(
-                user=user,
-                full_name=user.username,
-                date_of_birth="2000-01-01",
-                gender="Other",
-                phone="0000000000"                       
-            )
-            patient_group = Group.objects.get(
-                name="Patient"
+
+            with transaction.atomic():
+
+                # -------------------------
+                # CREATE USER ACCOUNT
+                # -------------------------
+
+                user = form.save(
+                    commit=False
+                )
+
+                user.email = form.cleaned_data[
+                    'email'
+                ]
+
+                user.save()
+
+
+                # -------------------------
+                # ASSIGN PATIENT ROLE
+                # -------------------------
+
+                patient_group, created = (
+                    Group.objects.get_or_create(
+                        name='Patient'
+                    )
+                )
+
+                user.groups.add(
+                    patient_group
+                )
+
+
+                # -------------------------
+                # CREATE PATIENT PROFILE
+                # -------------------------
+
+                Patient.objects.create(
+
+                    user=user,
+
+                    full_name=form.cleaned_data[
+                        'full_name'
+                    ],
+
+                    date_of_birth=form.cleaned_data[
+                        'date_of_birth'
+                    ],
+
+                    gender=form.cleaned_data[
+                        'gender'
+                    ],
+
+                    phone=form.cleaned_data[
+                        'phone'
+                    ],
+
+                    address=form.cleaned_data[
+                        'address'
+                    ],
+
+                    blood_group=form.cleaned_data[
+                        'blood_group'
+                    ],
+                )
+
+
+            login(
+                request,
+                user
             )
 
-            user.groups.add(
-                patient_group
+
+            messages.success(
+                request,
+                "Registration successful!"
             )
-            
-            login(request, user)
-            messages.success(request, "Registration successful!")
-            return redirect('dashboard')
+
+
+            return redirect(
+                'dashboard'
+            )
+
+
     else:
+
         form = PatientRegistrationForm()
+
+
     return render(
-    request,
-    'authentication/register.html',
-    {
-        'form': form
-    }
-)
+        request,
+        'authentication/register.html',
+        {
+            'form': form
+        }
+    )
 
 def user_login(request):
     if request.method == 'POST':

@@ -1190,3 +1190,53 @@ border:1px solid #e5e8eb;
     margin-right:8px;
 
 }
+/* ==========================================
+   PATIENT REGISTRATION
+========================================== */
+
+.registration-page {
+    background-color: #f1f8fa;
+    padding: 80px 0;
+}
+
+
+.registration-card {
+    background-color: white;
+    padding: 50px;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+
+.registration-card h1 {
+    color: #143447;
+    font-weight: 700;
+}
+
+
+.registration-section-title {
+    color: #143447;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+
+.registration-card input,
+.registration-card select,
+.registration-card textarea {
+    min-height: 48px;
+}
+
+
+.registration-card textarea {
+    min-height: 100px;
+}
+
+
+@media (max-width: 768px) {
+
+    .registration-card {
+        padding: 30px 20px;
+    }
+
+}
