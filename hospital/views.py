@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
+from django.db import transaction
 from .decorators import doctor_required, patient_required
 from django.contrib.auth.models import Group
 from .models import Department, Doctor, Patient, Appointment
-from .forms import PatientRegistrationForm, AppointmentForm
+from .forms import PatientRegistrationForm, AppointmentForm ,DoctorCreationForm
 
 def home(request):
     departments = Department.objects.all()[:6]
@@ -460,4 +462,124 @@ def login_redirect(request):
 
     return redirect(
         'home'
+    )
+    
+@staff_member_required
+def create_doctor(request):
+
+    if request.method == "POST":
+
+        form = DoctorCreationForm(
+            request.POST,
+            request.FILES
+        )
+
+        if form.is_valid():
+
+            with transaction.atomic():
+
+                # -------------------------
+                # CREATE LOGIN ACCOUNT
+                # -------------------------
+
+                user = form.save(
+                    commit=False
+                )
+
+                user.email = form.cleaned_data[
+                    'email'
+                ]
+
+                user.save()
+
+
+                # -------------------------
+                # ASSIGN DOCTOR ROLE
+                # -------------------------
+
+                doctor_group, created = (
+                    Group.objects.get_or_create(
+                        name="Doctor"
+                    )
+                )
+
+                user.groups.add(
+                    doctor_group
+                )
+
+
+                # -------------------------
+                # CREATE DOCTOR PROFILE
+                # -------------------------
+
+                Doctor.objects.create(
+
+                    user=user,
+
+                    name=form.cleaned_data[
+                        'name'
+                    ],
+
+                    department=form.cleaned_data[
+                        'department'
+                    ],
+
+                    qualification=form.cleaned_data[
+                        'qualification'
+                    ],
+
+                    experience=form.cleaned_data[
+                        'experience'
+                    ],
+
+                    fee=form.cleaned_data[
+                        'fee'
+                    ],
+
+                    image=form.cleaned_data.get(
+                        'image'
+                    ),
+
+                    bio=form.cleaned_data.get(
+                        'bio'
+                    ),
+
+                    location=form.cleaned_data.get(
+                        'location'
+                    ),
+
+                    languages=form.cleaned_data.get(
+                        'languages'
+                    ),
+
+                    available_days=form.cleaned_data.get(
+                        'available_days'
+                    ),
+
+                    rating=form.cleaned_data[
+                        'rating'
+                    ],
+                )
+
+
+            messages.success(
+                request,
+                "Doctor account created successfully."
+            )
+
+            return redirect(
+                'doctor_list'
+            )
+
+    else:
+
+        form = DoctorCreationForm()
+
+
+    return render(
+        request,
+        'management/create_doctor.html',
+        {
+            'form': form
+        }
     )
