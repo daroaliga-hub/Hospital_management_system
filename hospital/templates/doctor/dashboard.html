@@ -1,5 +1,5 @@
-{% extends 'base.html' %} {% block title %} Doctor Dashboard {% endblock %} {%
-block content %}
+{% extends 'base.html' %} {% block title %} Doctor Dashboard {% endblock %} 
+{% block content %}
 
 <section class="doctor-dashboard">
   <div class="container">
@@ -87,7 +87,7 @@ block content %}
           <span class="status {{ appointment.status }}">
             {{ appointment.status|title }}
           </span>
-          {% if appointment.status == 'confirmed' or appointment.status =='completed' %}
+          {% if appointment.status == 'confirmed' or appointment.status == 'completed' %}
 
           <a
             href="{% url 'add_medical_notes' appointment.id %}"

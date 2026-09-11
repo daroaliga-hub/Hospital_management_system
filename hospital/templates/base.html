@@ -1,4 +1,5 @@
 {% load static %}
+{% load role_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -133,7 +134,7 @@
 
                         <a
                             class="nav-link"
-                            href="#services"
+                            href="{% url 'home' %}#services"
                         >
                             Services
                         </a>
@@ -145,7 +146,7 @@
 
                         <a
                             class="nav-link"
-                            href="#locations"
+                            href="{% url 'home' %}#locations"
                         >
                             Locations
                         </a>
@@ -155,55 +156,88 @@
 
                     {% if request.user.is_authenticated %}
 
-                        <li class="nav-item">
+                        {% if request.user.is_staff or request.user.is_superuser %}
 
-                            <a
-                                class="nav-link"
-                                href="{% url 'dashboard' %}"
-                            >
-                                Patient Portal
-                            </a>
+                            <li class="nav-item">
 
-                        </li>
+                                <a
+                                    class="nav-link"
+                                    href="{% url 'admin:index' %}"
+                                >
+                                    Admin Panel
+                                </a>
 
-
-                        <li class="nav-item ms-lg-3">
-
-                            <a
-                                class="btn btn-outline-primary"
-                                href="{% url 'logout' %}"
-                            >
-                                Logout
-                            </a>
-
-                        </li>
-
-                    {% else %}
-
-                        <li class="nav-item">
-
-                            <a
-                                class="nav-link"
-                                href="{% url 'login' %}"
-                            >
-                                Patient Portal
-                            </a>
-
-                        </li>
+                            </li>
 
 
-                        <li class="nav-item ms-lg-3">
+                        {% elif request.user|has_group:"Doctor" %}
 
-                            <a
-                                class="btn btn-primary"
-                                href="{% url 'register' %}"
-                            >
-                                Create Account
-                            </a>
+                            <li class="nav-item">
 
-                        </li>
+                                <a
+                                    class="nav-link"
+                                    href="{% url 'doctor_dashboard' %}"
+                                >
+                                    Doctor Dashboard
+                                </a>
 
-                    {% endif %}
+                            </li>
+
+
+                        {% elif request.user|has_group:"Patient" %}
+
+                            <li class="nav-item">
+
+                                <a
+                                    class="nav-link"
+                                    href="{% url 'dashboard' %}"
+                                >
+                                    Patient Portal
+                                </a>
+
+                            </li>
+
+                        {% endif %}
+
+
+    <li class="nav-item ms-lg-3">
+
+        <a
+            class="btn btn-outline-primary"
+            href="{% url 'logout' %}"
+        >
+            Logout
+        </a>
+
+    </li>
+
+
+    {% else %}
+
+        <li class="nav-item">
+
+            <a
+                class="nav-link"
+                href="{% url 'login' %}"
+            >
+                Login
+            </a>
+
+        </li>
+
+
+        <li class="nav-item ms-lg-3">
+
+            <a
+                class="btn btn-primary"
+                href="{% url 'register' %}"
+            >
+                Create Account
+            </a>
+
+        </li>
+
+    {% endif %}
 
                 </ul>
 

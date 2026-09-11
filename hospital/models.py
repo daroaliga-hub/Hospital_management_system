@@ -17,7 +17,7 @@ class Doctor(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        null=True,
+        null=True, # For production, we would remove null=True.
         blank=True
     )
 
@@ -120,9 +120,7 @@ class Appointment(models.Model):
     )
 
 
-    notes = models.TextField(
-        blank=True
-    )
+    
     def save(self, *args, **kwargs):
 
         if not self.appointment_number:

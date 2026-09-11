@@ -76,10 +76,22 @@ def register(request):
     if request.method == 'POST':
         form = PatientRegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            patient_group = Group.objects.get(name="Patient")
-            user.groups.add(patient_group)          
-            Patient.objects.create(user=user, full_name=user.username)
+            user = form.save()       
+            Patient.objects.create(
+                user=user,
+                full_name=user.username,
+                date_of_birth="2000-01-01",
+                gender="Other",
+                phone="0000000000"                       
+            )
+            patient_group = Group.objects.get(
+                name="Patient"
+            )
+
+            user.groups.add(
+                patient_group
+            )
+            
             login(request, user)
             messages.success(request, "Registration successful!")
             return redirect('dashboard')
@@ -420,6 +432,13 @@ def add_medical_notes(request, appointment_id):
         }
     )
 def login_redirect(request):
+
+    if request.user.is_superuser or request.user.is_staff:
+
+        return redirect(
+            'admin:index'
+        )
+
 
     if request.user.groups.filter(
         name="Doctor"

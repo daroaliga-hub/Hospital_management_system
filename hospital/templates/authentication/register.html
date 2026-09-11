@@ -1,0 +1,28 @@
+<form method="POST">
+
+    {% csrf_token %}
+
+    {% if form.errors %}
+
+        <div class="alert alert-danger">
+
+            <strong>
+                Please correct the following errors:
+            </strong>
+
+            {{ form.errors }}
+
+        </div>
+
+    {% endif %}
+
+    {{ form.as_p }}
+
+    <button
+        type="submit"
+        class="btn btn-primary"
+    >
+        Register
+    </button>
+
+</form>
