@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db import transaction
+from django.views.decorators.http import require_POST
 from .decorators import doctor_required, patient_required
 from django.contrib.auth.models import Group
 from .models import Department, Doctor, Patient, Appointment
@@ -126,11 +127,9 @@ def user_login(request):
 @patient_required
 def dashboard(request):
 
-    patient, created = Patient.objects.get_or_create(
-        user=request.user,
-        defaults={
-            "full_name": request.user.username
-        }
+    patient = get_object_or_404(
+        Patient,
+        user=request.user
     )
 
 
@@ -333,36 +332,54 @@ def doctor_dashboard(request):
     )
 
 @login_required
-def update_appointment_status(request, appointment_id, status):
+@doctor_required
+@require_POST
+def update_appointment_status(
+    request,
+    appointment_id,
+    status
+):
+
+    doctor = get_object_or_404(
+        Doctor,
+        user=request.user
+    )
 
     appointment = get_object_or_404(
         Appointment,
-        id=appointment_id
+        id=appointment_id,
+        doctor=doctor
+    )
+
+    allowed_transitions = {
+
+        'pending': [
+            'confirmed',
+            'cancelled'
+        ],
+
+        'confirmed': [
+            'completed',
+            'cancelled'
+        ],
+
+        'completed': [],
+
+        'cancelled': [],
+    }
+
+
+    allowed_statuses = allowed_transitions.get(
+        appointment.status,
+        []
     )
 
 
-    try:
-
-        doctor = request.user.doctor
-
-    except Doctor.DoesNotExist:
+    if status not in allowed_statuses:
 
         messages.error(
             request,
-            "Doctor account required."
-        )
-
-        return redirect('home')
-
-
-
-    # Security check
-
-    if appointment.doctor != doctor:
-
-        messages.error(
-            request,
-            "You cannot modify this appointment."
+            "This appointment status change is not allowed."
         )
 
         return redirect(
@@ -370,54 +387,79 @@ def update_appointment_status(request, appointment_id, status):
         )
 
 
+    appointment.status = status
 
-    if status in [
-        'confirmed',
-        'cancelled',
-        'completed'
-    ]:
-
-        appointment.status = status
-
-        appointment.save()
+    appointment.save(
+        update_fields=['status']
+    )
 
 
-        messages.success(
-            request,
-            f"Appointment {status}."
-        )
-
+    messages.success(
+        request,
+        f"Appointment {status}."
+    )
 
 
     return redirect(
         'doctor_dashboard'
     )
 @login_required
-def add_medical_notes(request, appointment_id):
+@doctor_required
+def add_medical_notes(
+    request,
+    appointment_id
+):
+
+    doctor = get_object_or_404(
+        Doctor,
+        user=request.user
+    )
 
     appointment = get_object_or_404(
         Appointment,
-        id=appointment_id
+        id=appointment_id,
+        doctor=doctor
     )
+
+
+    if appointment.status not in [
+        'confirmed',
+        'completed'
+    ]:
+
+        messages.error(
+            request,
+            "Medical notes can only be added to confirmed or completed appointments."
+        )
+
+        return redirect(
+            'doctor_dashboard'
+        )
 
 
     if request.method == "POST":
 
         notes = request.POST.get(
-            "medical_notes"
-        )
+            "medical_notes",
+            ""
+        ).strip()
 
 
         appointment.medical_notes = notes
 
         appointment.status = "completed"
 
-        appointment.save()
+        appointment.save(
+            update_fields=[
+                'medical_notes',
+                'status'
+            ]
+        )
 
 
         messages.success(
             request,
-            "Medical notes saved."
+            "Medical notes saved and appointment completed."
         )
 
 

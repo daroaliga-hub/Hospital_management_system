@@ -100,28 +100,55 @@
           <div class="mt-3">
             {% if appointment.status == 'pending' %}
 
-            <a
-              href="{% url 'update_appointment_status' appointment.id 'confirmed' %}"
-              class="btn btn-success btn-sm"
+            <form
+                method="POST"
+                action="{% url 'update_appointment_status' appointment.id 'confirmed' %}"
+                class="d-inline"
             >
-              Confirm
-            </a>
+                {% csrf_token %}
 
-            <a
-              href="{% url 'update_appointment_status' appointment.id 'cancelled' %}"
-              class="btn btn-danger btn-sm"
+                <button
+                    type="submit"
+                    class="btn btn-success btn-sm"
+                >
+                    Confirm
+                </button>
+
+            </form>
+
+            <form
+                method="POST"
+                action="{% url 'update_appointment_status' appointment.id 'cancelled' %}"
+                class="d-inline"
             >
-              Cancel
-            </a>
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="btn btn-danger btn-sm"
+                >
+                    Cancel
+                </button>
+
+            </form>
 
             {% endif %} {% if appointment.status == 'confirmed' %}
 
-            <a
-              href="{% url 'update_appointment_status' appointment.id 'completed' %}"
-              class="btn btn-primary btn-sm"
+            <form
+                method="POST"
+                action="{% url 'update_appointment_status' appointment.id 'completed' %}"
+                class="d-inline"
             >
-              Complete Visit
-            </a>
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-sm"
+                >
+                    Complete Visit
+                </button>
+
+            </form>
 
             {% endif %}
           </div>
