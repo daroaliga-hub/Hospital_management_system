@@ -233,3 +233,119 @@ class DoctorCreationForm(UserCreationForm):
             'password1',
             'password2',
         ]
+        
+class PatientProfileForm(forms.ModelForm):
+
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(
+            attrs={
+                'class': 'form-control'
+            }
+        )
+    )
+
+    class Meta:
+
+        model = Patient
+
+        fields = [
+            'full_name',
+            'date_of_birth',
+            'gender',
+            'phone',
+            'address',
+            'blood_group',
+        ]
+
+        widgets = {
+
+            'full_name': forms.TextInput(
+                attrs={
+                    'class': 'form-control'
+                }
+            ),
+
+            'date_of_birth': forms.DateInput(
+                attrs={
+                    'type': 'date',
+                    'class': 'form-control'
+                }
+            ),
+
+            'gender': forms.Select(
+                attrs={
+                    'class': 'form-select'
+                }
+            ),
+
+            'phone': forms.TextInput(
+                attrs={
+                    'class': 'form-control'
+                }
+            ),
+
+            'address': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'rows': 4
+                }
+            ),
+
+            'blood_group': forms.TextInput(
+                attrs={
+                    'class': 'form-control'
+                }
+            ),
+        }
+
+
+    def __init__(self, *args, **kwargs):
+
+        user = kwargs.pop(
+            'user',
+            None
+        )
+
+        super().__init__(
+            *args,
+            **kwargs
+        )
+
+        if user:
+
+            self.fields[
+                'email'
+            ].initial = user.email
+
+            self.user = user
+
+
+    def save(self, commit=True):
+
+        patient = super().save(
+            commit=False
+        )
+
+        if hasattr(
+            self,
+            'user'
+        ):
+
+            self.user.email = (
+                self.cleaned_data['email']
+            )
+
+            if commit:
+
+                self.user.save(
+                    update_fields=[
+                        'email'
+                    ]
+                )
+
+        if commit:
+
+            patient.save()
+
+        return patient

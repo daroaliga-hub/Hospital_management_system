@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from .decorators import doctor_required, patient_required
 from django.contrib.auth.models import Group
 from .models import Department, Doctor, Patient, Appointment
-from .forms import PatientRegistrationForm, AppointmentForm ,DoctorCreationForm
+from .forms import PatientRegistrationForm, AppointmentForm ,DoctorCreationForm, PatientProfileForm
 
 def home(request):
     departments = Department.objects.all()[:6]
@@ -701,5 +701,66 @@ def create_doctor(request):
         'management/create_doctor.html',
         {
             'form': form
+        }
+    )
+@login_required
+@patient_required
+def patient_profile(request):
+
+    patient = get_object_or_404(
+        Patient,
+        user=request.user
+    )
+
+    return render(
+        request,
+        'patient/profile.html',
+        {
+            'patient': patient
+        }
+    )
+@login_required
+@patient_required
+def edit_patient_profile(request):
+
+    patient = get_object_or_404(
+        Patient,
+        user=request.user
+    )
+
+    if request.method == 'POST':
+
+        form = PatientProfileForm(
+            request.POST,
+            instance=patient,
+            user=request.user
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                "Profile updated successfully."
+            )
+
+            return redirect(
+                'patient_profile'
+            )
+
+    else:
+
+        form = PatientProfileForm(
+            instance=patient,
+            user=request.user
+        )
+
+    return render(
+        request,
+        'patient/edit_profile.html',
+        {
+            'form': form,
+            'patient': patient,
         }
     )

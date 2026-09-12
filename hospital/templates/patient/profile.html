@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+My Profile | CarePoint
+{% endblock %}
+
+
+{% block content %}
+
+<section class="patient-profile-page">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-9">
+
+
+                <div class="profile-header-card">
+
+                    <div>
+
+                        <span class="section-small-title">
+                            PATIENT PORTAL
+                        </span>
+
+                        <h1 class="mt-2">
+                            My Profile
+                        </h1>
+
+                        <p>
+                            View and manage your personal information.
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        href="{% url 'edit_patient_profile' %}"
+                        class="btn btn-primary"
+                    >
+                        <i class="bi bi-pencil-square"></i>
+
+                        Edit Profile
+                    </a>
+
+                </div>
+
+
+                <div class="patient-profile-card mt-4">
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+
+                            <div class="profile-field">
+
+                                <span>
+                                    Full Name
+                                </span>
+
+                                <strong>
+                                    {{ patient.full_name }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="profile-field">
+
+                                <span>
+                                    Email
+                                </span>
+
+                                <strong>
+                                    {{ request.user.email }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="profile-field">
+
+                                <span>
+                                    Date of Birth
+                                </span>
+
+                                <strong>
+                                    {{ patient.date_of_birth }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="profile-field">
+
+                                <span>
+                                    Gender
+                                </span>
+
+                                <strong>
+                                    {{ patient.gender }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="profile-field">
+
+                                <span>
+                                    Phone
+                                </span>
+
+                                <strong>
+                                    {{ patient.phone }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="profile-field">
+
+                                <span>
+                                    Blood Group
+                                </span>
+
+                                <strong>
+                                    {{ patient.blood_group|default:"Not provided" }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <div class="profile-field">
+
+                                <span>
+                                    Address
+                                </span>
+
+                                <strong>
+                                    {{ patient.address|default:"Not provided" }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mt-4">
+
+                    <a
+                        href="{% url 'dashboard' %}"
+                        class="btn btn-outline-primary"
+                    >
+                        <i class="bi bi-arrow-left"></i>
+
+                        Back to Dashboard
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

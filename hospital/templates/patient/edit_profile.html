@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Edit Profile | CarePoint
+{% endblock %}
+
+
+{% block content %}
+
+<section class="patient-profile-page">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+
+                <div class="patient-profile-card">
+
+                    <span class="section-small-title">
+                        PATIENT PORTAL
+                    </span>
+
+                    <h1 class="mt-2 mb-4">
+                        Edit Profile
+                    </h1>
+
+
+                    {% if form.errors %}
+
+                        <div class="alert alert-danger">
+
+                            <strong>
+                                Please correct the errors below.
+                            </strong>
+
+                            {{ form.errors }}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        <div class="row g-4">
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Full Name
+                                </label>
+
+                                {{ form.full_name }}
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Email
+                                </label>
+
+                                {{ form.email }}
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Date of Birth
+                                </label>
+
+                                {{ form.date_of_birth }}
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Gender
+                                </label>
+
+                                {{ form.gender }}
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Phone
+                                </label>
+
+                                {{ form.phone }}
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Blood Group
+                                </label>
+
+                                {{ form.blood_group }}
+
+                            </div>
+
+
+                            <div class="col-12">
+
+                                <label class="form-label">
+                                    Address
+                                </label>
+
+                                {{ form.address }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="mt-5 d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                Save Changes
+                            </button>
+
+
+                            <a
+                                href="{% url 'patient_profile' %}"
+                                class="btn btn-outline-secondary"
+                            >
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
