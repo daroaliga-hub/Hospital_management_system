@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Appointment Details | CarePoint
+{% endblock %}
+
+
+{% block content %}
+
+<section class="appointment-detail-page">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+
+                <div class="appointment-detail-card">
+
+
+                    <!-- HEADER -->
+
+                    <div class="appointment-detail-header">
+
+                        <div>
+
+                            <span class="section-small-title">
+                                PATIENT PORTAL
+                            </span>
+
+                            <h1 class="mt-2">
+                                Appointment Details
+                            </h1>
+
+                        </div>
+
+
+                        <span
+                            class="status {{ appointment.status }}"
+                        >
+                            {{ appointment.status|title }}
+                        </span>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <!-- APPOINTMENT NUMBER -->
+
+                    <div class="appointment-reference">
+
+                        <small>
+                            Appointment Number
+                        </small>
+
+                        <strong>
+                            {{ appointment.appointment_number }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- DETAILS -->
+
+                    <div class="row g-4 mt-2">
+
+                        <div class="col-md-6">
+
+                            <div class="detail-item">
+
+                                <span>
+                                    Doctor
+                                </span>
+
+                                <strong>
+                                    Dr. {{ appointment.doctor.name }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="detail-item">
+
+                                <span>
+                                    Department
+                                </span>
+
+                                <strong>
+                                    {{ appointment.department.name }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="detail-item">
+
+                                <span>
+                                    Date
+                                </span>
+
+                                <strong>
+                                    {{ appointment.date }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="detail-item">
+
+                                <span>
+                                    Time
+                                </span>
+
+                                <strong>
+                                    {{ appointment.time }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <div class="detail-item">
+
+                                <span>
+                                    Symptoms / Reason for Visit
+                                </span>
+
+                                <strong>
+                                    {{ appointment.symptoms|default:"Not provided" }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MEDICAL NOTES -->
+
+                    {% if appointment.status == "completed" %}
+
+                        <div class="medical-notes-box mt-5">
+
+                            <h4>
+                                <i class="bi bi-clipboard2-pulse"></i>
+
+                                Medical Notes
+                            </h4>
+
+
+                            {% if appointment.medical_notes %}
+
+                                <p>
+                                    {{ appointment.medical_notes|linebreaks }}
+                                </p>
+
+                            {% else %}
+
+                                <p>
+                                    No medical notes have been added.
+                                </p>
+
+                            {% endif %}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="appointment-detail-actions mt-5">
+
+                        <a
+                            href="{% url 'dashboard' %}"
+                            class="btn btn-outline-secondary"
+                        >
+                            <i class="bi bi-arrow-left"></i>
+
+                            Back to Dashboard
+                        </a>
+
+
+                        {% if appointment.status == "pending" or appointment.status == "confirmed" %}
+
+                            <form
+                                method="POST"
+                                action="{% url 'cancel_patient_appointment' appointment.id %}"
+                                class="d-inline"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-outline-danger"
+                                >
+                                    Cancel Appointment
+                                </button>
+
+                            </form>
+
+                        {% endif %}
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

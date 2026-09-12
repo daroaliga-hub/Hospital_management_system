@@ -1310,4 +1310,132 @@ border:1px solid #e5e8eb;
         padding: 25px;
     }
 
-}s
+}
+/* ==========================================
+   APPOINTMENT DETAIL
+========================================== */
+
+.appointment-detail-page {
+    background-color: #f6f9fa;
+    padding: 70px 0;
+}
+
+
+.appointment-detail-card {
+    background-color: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+
+.appointment-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.appointment-detail-header h1 {
+    color: #143447;
+    font-weight: 700;
+}
+
+
+.appointment-reference {
+    background-color: #f1f8fa;
+    border-radius: 10px;
+    padding: 18px;
+    margin-top: 25px;
+}
+
+
+.appointment-reference small {
+    display: block;
+    color: #73818a;
+}
+
+
+.appointment-reference strong {
+    display: block;
+    color: #143447;
+    font-size: 20px;
+    margin-top: 3px;
+}
+
+
+.detail-item {
+    border-bottom: 1px solid #e5e8eb;
+    padding-bottom: 15px;
+}
+
+
+.detail-item span {
+    display: block;
+    color: #788892;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+
+.detail-item strong {
+    color: #143447;
+}
+
+
+.medical-notes-box {
+    background-color: #f1f8fa;
+    border-left: 4px solid #007c91;
+    padding: 25px;
+    border-radius: 8px;
+}
+
+
+.medical-notes-box h4 {
+    color: #143447;
+    font-weight: 700;
+}
+
+
+.appointment-detail-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+
+@media (max-width: 768px) {
+
+    .appointment-detail-header {
+        display: block;
+    }
+
+
+    .appointment-detail-header .status {
+        display: inline-block;
+        margin-top: 15px;
+    }
+
+
+    .appointment-detail-actions {
+        display: block;
+    }
+
+
+    .appointment-detail-actions form,
+    .appointment-detail-actions .btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+}
+.status.cancelled {
+    background-color: #fde4e4;
+    color: #a12626;
+}
+
+
+.status.completed {
+    background-color: #e3f0ff;
+    color: #245d97;
+}

@@ -1,5 +1,5 @@
-{% extends 'base.html' %} {% block title %} Patient Portal {% endblock %} 
-{% block content %}
+{% extends 'base.html' %} {% block title %} Patient Portal {% endblock %} {%
+block content %}
 
 <section class="patient-dashboard">
   <div class="container">
@@ -105,6 +105,13 @@
           <span class="status {{ appointment.status }}">
             {{ appointment.status|title }}
           </span>
+
+          <a
+            href="{% url 'appointment_detail' appointment.id %}"
+            class="btn btn-outline-primary btn-sm mt-2"
+          >
+            View Details
+          </a>
         </div>
       </div>
 
@@ -173,6 +180,7 @@
               <th>Time</th>
 
               <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
 
@@ -187,6 +195,14 @@
               <td>{{ appointment.time }}</td>
 
               <td>{{ appointment.status|title }}</td>
+              <td>
+                <a
+                  href="{% url 'appointment_detail' appointment.id %}"
+                  class="btn btn-sm btn-outline-primary"
+                >
+                  Details
+                </a>
+              </td>
             </tr>
 
             {% endfor %}

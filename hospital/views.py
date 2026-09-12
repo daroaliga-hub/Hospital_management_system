@@ -764,3 +764,73 @@ def edit_patient_profile(request):
             'patient': patient,
         }
     )
+@login_required
+@patient_required
+def appointment_detail(
+    request,
+    appointment_id
+):
+
+    appointment = get_object_or_404(
+        Appointment,
+        id=appointment_id,
+        patient__user=request.user
+    )
+
+    return render(
+        request,
+        'patient/appointment_detail.html',
+        {
+            'appointment': appointment
+        }
+    )
+@login_required
+@patient_required
+@require_POST
+def cancel_patient_appointment(
+    request,
+    appointment_id
+):
+
+    appointment = get_object_or_404(
+        Appointment,
+        id=appointment_id,
+        patient__user=request.user
+    )
+
+
+    if appointment.status not in [
+        'pending',
+        'confirmed'
+    ]:
+
+        messages.error(
+            request,
+            "This appointment can no longer be cancelled."
+        )
+
+        return redirect(
+            'appointment_detail',
+            appointment_id=appointment.id
+        )
+
+
+    appointment.status = 'cancelled'
+
+    appointment.save(
+        update_fields=[
+            'status'
+        ]
+    )
+
+
+    messages.success(
+        request,
+        "Appointment cancelled successfully."
+    )
+
+
+    return redirect(
+        'appointment_detail',
+        appointment_id=appointment.id
+    )

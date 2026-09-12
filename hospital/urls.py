@@ -16,4 +16,6 @@ urlpatterns = [
     path( 'management/doctors/create/', views.create_doctor, name='create_doctor'),
     path( 'profile/', views.patient_profile, name='patient_profile'),
     path( 'profile/edit/', views.edit_patient_profile, name='edit_patient_profile'),
+    path( 'appointments/<int:appointment_id>/', views.appointment_detail, name='appointment_detail'),
+    path( 'appointments/<int:appointment_id>/cancel/', views.cancel_patient_appointment, name='cancel_patient_appointment'),
 ]
