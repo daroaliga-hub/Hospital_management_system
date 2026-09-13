@@ -2,7 +2,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Department, Doctor,DoctorAvailability, Patient, Appointment
-
+from django.utils import timezone
+from .utils import get_available_time_slots
 
 class PatientRegistrationForm(UserCreationForm):
 
@@ -112,6 +113,24 @@ class PatientRegistrationForm(UserCreationForm):
 
 class AppointmentForm(forms.ModelForm):
 
+    time = forms.TimeField(
+        input_formats=[
+            '%H:%M'
+        ],
+        widget=forms.Select(
+            attrs={
+                'class': 'form-select'
+            },
+            choices=[
+                (
+                    '',
+                    'Select doctor and date first'
+                )
+            ]
+        )
+    )
+
+
     class Meta:
 
         model = Appointment
@@ -120,11 +139,17 @@ class AppointmentForm(forms.ModelForm):
             'doctor',
             'date',
             'time',
-            'symptoms'
+            'symptoms',
         ]
 
 
         widgets = {
+
+            'doctor': forms.Select(
+                attrs={
+                    'class': 'form-select'
+                }
+            ),
 
             'date': forms.DateInput(
                 attrs={
@@ -133,32 +158,122 @@ class AppointmentForm(forms.ModelForm):
                 }
             ),
 
-
-            'time': forms.TimeInput(
-                attrs={
-                    'type': 'time',
-                    'class': 'form-control'
-                }
-            ),
-
-
             'symptoms': forms.Textarea(
                 attrs={
                     'class': 'form-control',
                     'rows': 5,
                     'placeholder':
-                    'Describe your symptoms...'
+                    'Describe your symptoms or reason for visit...'
                 }
             ),
+        }
 
 
-            'doctor': forms.Select(
-                attrs={
-                    'class': 'form-select'
-                }
+    def __init__(
+        self,
+        *args,
+        doctor=None,
+        appointment_date=None,
+        **kwargs
+    ):
+
+        super().__init__(
+            *args,
+            **kwargs
+        )
+
+
+        # Prevent selecting dates before today.
+        self.fields[
+            'date'
+        ].widget.attrs[
+            'min'
+        ] = timezone.localdate().isoformat()
+
+
+        if (
+            doctor
+            and appointment_date
+        ):
+
+            slots = get_available_time_slots(
+                doctor,
+                appointment_date
             )
 
-        }
+
+            choices = [
+                (
+                    '',
+                    'Select an available time'
+                )
+            ]
+
+
+            for slot in slots:
+
+                choices.append(
+                    (
+                        slot.strftime('%H:%M'),
+                        slot.strftime('%I:%M %p')
+                    )
+                )
+
+
+            self.fields[
+                'time'
+            ].widget.choices = choices
+
+
+    def clean(self):
+
+        cleaned_data = super().clean()
+
+
+        doctor = cleaned_data.get(
+            'doctor'
+        )
+
+        appointment_date = cleaned_data.get(
+            'date'
+        )
+
+        appointment_time = cleaned_data.get(
+            'time'
+        )
+
+
+        if (
+            doctor
+            and appointment_date
+            and appointment_time
+        ):
+
+            available_slots = (
+                get_available_time_slots(
+                    doctor,
+                    appointment_date
+                )
+            )
+
+
+            normalized_time = (
+                appointment_time.replace(
+                    second=0,
+                    microsecond=0
+                )
+            )
+
+
+            if normalized_time not in available_slots:
+
+                raise forms.ValidationError(
+                    "That appointment time is no longer available. "
+                    "Please select another time."
+                )
+
+
+        return cleaned_data
 
 class DoctorCreationForm(UserCreationForm):
 

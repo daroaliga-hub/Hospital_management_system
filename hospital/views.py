@@ -7,10 +7,12 @@ from django.db import transaction
 from django.views.decorators.http import require_POST
 from .decorators import doctor_required, patient_required
 from django.contrib.auth.models import Group
-from .utils import doctor_is_available
+from .utils import doctor_is_available , get_available_time_slots
 from django.utils import timezone
 from .models import Department, Doctor, Patient, Appointment, DoctorAvailability
 from .forms import PatientRegistrationForm, AppointmentForm ,DoctorCreationForm, PatientProfileForm,DoctorAvailabilityForm
+from datetime import datetime
+from django.http import JsonResponse
 
 def home(request):
     departments = Department.objects.all()[:6]
@@ -249,15 +251,71 @@ def dashboard(request):
 @patient_required
 def book_appointment(request):
 
-    selected_doctor = request.GET.get(
+    selected_doctor_id = request.GET.get(
         'doctor'
     )
 
 
+    patient = get_object_or_404(
+        Patient,
+        user=request.user
+    )
+
+
+    selected_doctor = None
+    selected_date = None
+
+
+    # -----------------------------------
+    # POST
+    # -----------------------------------
+
     if request.method == 'POST':
 
+        doctor_id = request.POST.get(
+            'doctor'
+        )
+
+        date_value = request.POST.get(
+            'date'
+        )
+
+
+        if doctor_id:
+
+            try:
+
+                selected_doctor = (
+                    Doctor.objects.get(
+                        id=doctor_id
+                    )
+                )
+
+            except Doctor.DoesNotExist:
+
+                selected_doctor = None
+
+
+        if date_value:
+
+            try:
+
+                selected_date = (
+                    datetime.strptime(
+                        date_value,
+                        '%Y-%m-%d'
+                    ).date()
+                )
+
+            except ValueError:
+
+                selected_date = None
+
+
         form = AppointmentForm(
-            request.POST
+            request.POST,
+            doctor=selected_doctor,
+            appointment_date=selected_date
         )
 
 
@@ -267,12 +325,6 @@ def book_appointment(request):
                 commit=False
             )
 
-            patient, created = Patient.objects.get_or_create(
-                user=request.user,
-                defaults={
-                    "full_name": request.user.username
-                }
-            )
 
             appointment.patient = patient
 
@@ -281,31 +333,21 @@ def book_appointment(request):
                 appointment.doctor.department
             )
 
-            if appointment.date < timezone.localdate():
-                            
-                            messages.error(
-                                request,
-                                "You cannot book an appointment in the past."
-                            )
-            
-                            return render(
-                                request,
-                                'book_appointment.html',
-                                {
-                                    'form': form
-                                }
-                            )
-                            
-            if not doctor_is_available(
-                appointment.doctor,
-                appointment.date,
-                appointment.time
+
+            # -----------------------------
+            # DATE PROTECTION
+            # -----------------------------
+
+            if (
+                appointment.date
+                < timezone.localdate()
             ):
 
                 messages.error(
                     request,
-                    "The doctor is not available at the selected date and time."
+                    "You cannot book an appointment in the past."
                 )
+
 
                 return render(
                     request,
@@ -314,6 +356,37 @@ def book_appointment(request):
                         'form': form
                     }
                 )
+
+
+            # -----------------------------
+            # SCHEDULE PROTECTION
+            # -----------------------------
+
+            if not doctor_is_available(
+                appointment.doctor,
+                appointment.date,
+                appointment.time
+            ):
+
+                messages.error(
+                    request,
+                    "The doctor is not available at that date and time."
+                )
+
+
+                return render(
+                    request,
+                    'book_appointment.html',
+                    {
+                        'form': form
+                    }
+                )
+
+
+            # -----------------------------
+            # DOUBLE BOOKING PROTECTION
+            # -----------------------------
+
             existing = Appointment.objects.filter(
 
                 doctor=appointment.doctor,
@@ -330,12 +403,12 @@ def book_appointment(request):
             ).exists()
 
 
-
             if existing:
 
                 messages.error(
                     request,
-                    "This doctor is not available at this time."
+                    "That appointment slot has just been booked. "
+                    "Please select another time."
                 )
 
 
@@ -355,31 +428,46 @@ def book_appointment(request):
                 )
 
 
+    # -----------------------------------
+    # GET
+    # -----------------------------------
 
     else:
 
-        form = AppointmentForm()
+        initial = {}
 
 
+        if selected_doctor_id:
 
-        if selected_doctor:
+            try:
 
-            form.fields[
-                'doctor'
-            ].initial = selected_doctor
+                selected_doctor = (
+                    Doctor.objects.get(
+                        id=selected_doctor_id
+                    )
+                )
 
+                initial[
+                    'doctor'
+                ] = selected_doctor
+
+
+            except Doctor.DoesNotExist:
+
+                selected_doctor = None
+
+
+        form = AppointmentForm(
+            initial=initial
+        )
 
 
     return render(
-
         request,
-
         'book_appointment.html',
-
         {
             'form': form
         }
-
     )
 
 @login_required
@@ -960,4 +1048,98 @@ def delete_doctor_availability(
 
     return redirect(
         'doctor_schedule'
+    )
+@login_required
+@patient_required
+def appointment_slots(request):
+
+    doctor_id = request.GET.get(
+        'doctor'
+    )
+
+    date_value = request.GET.get(
+        'date'
+    )
+
+
+    if not doctor_id or not date_value:
+
+        return JsonResponse(
+            {
+                'slots': []
+            }
+        )
+
+
+    try:
+
+        doctor = Doctor.objects.get(
+            id=doctor_id
+        )
+
+
+        appointment_date = (
+            datetime.strptime(
+                date_value,
+                '%Y-%m-%d'
+            ).date()
+        )
+
+
+    except (
+        Doctor.DoesNotExist,
+        ValueError
+    ):
+
+        return JsonResponse(
+            {
+                'slots': [],
+                'error':
+                'Invalid doctor or date.'
+            },
+            status=400
+        )
+
+
+    if (
+        appointment_date
+        < timezone.localdate()
+    ):
+
+        return JsonResponse(
+            {
+                'slots': [],
+                'error':
+                'Appointments cannot be booked in the past.'
+            },
+            status=400
+        )
+
+
+    slots = get_available_time_slots(
+        doctor,
+        appointment_date
+    )
+
+
+    slot_data = []
+
+
+    for slot in slots:
+
+        slot_data.append(
+            {
+                'value':
+                    slot.strftime('%H:%M'),
+
+                'label':
+                    slot.strftime('%I:%M %p')
+            }
+        )
+
+
+    return JsonResponse(
+        {
+            'slots': slot_data
+        }
     )

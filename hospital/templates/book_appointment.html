@@ -15,44 +15,298 @@
           </div>
 
           <form method="POST">
-            {% csrf_token %}
 
-            <div class="row g-4">
-              <div class="col-md-12">
-                <label class="form-label"> Doctor </label>
+              {% csrf_token %}
 
-                {{ form.doctor }}
+
+              {% if form.non_field_errors %}
+
+                  <div class="alert alert-danger">
+
+                      {{ form.non_field_errors }}
+
+                  </div>
+
+              {% endif %}
+
+
+              <div class="row g-4">
+
+
+                  <div class="col-12">
+
+                      <label class="form-label">
+                          Doctor
+                      </label>
+
+                      {{ form.doctor }}
+
+                      {{ form.doctor.errors }}
+
+                  </div>
+
+
+                  <div class="col-md-6">
+
+                      <label class="form-label">
+                          Date
+                      </label>
+
+                      {{ form.date }}
+                      <small class="text-muted">
+                          Available appointment times will appear after selecting a date.
+                      </small>
+                      {{ form.date.errors }}
+
+                  </div>
+
+
+                  <div class="col-md-6">
+
+                      <label class="form-label">
+                          Available Time
+                      </label>
+
+                      {{ form.time }}
+
+                      {{ form.time.errors }}
+
+
+                      <small
+                          id="slotMessage"
+                          class="text-muted"
+                      >
+                          Select a doctor and date
+                          to view available times.
+                      </small>
+
+                  </div>
+
+
+                  <div class="col-12">
+
+                      <label class="form-label">
+                          Symptoms / Reason for Visit
+                      </label>
+
+                      {{ form.symptoms }}
+
+                      {{ form.symptoms.errors }}
+
+                  </div>
+
+
               </div>
 
-              <div class="col-md-6">
-                <label class="form-label"> Date </label>
 
-                {{ form.date }}
-              </div>
+              <button
+                  type="submit"
+                  class="btn btn-primary btn-lg w-100 mt-4"
+              >
+                  <i class="bi bi-calendar-check"></i>
 
-              <div class="col-md-6">
-                <label class="form-label"> Time </label>
+                  Confirm Appointment
+              </button>
 
-                {{ form.time }}
-              </div>
 
-              <div class="col-12">
-                <label class="form-label"> Symptoms </label>
-
-                {{ form.symptoms }}
-              </div>
-            </div>
-
-            <button class="btn btn-primary btn-lg w-100 mt-4">
-              <i class="bi bi-calendar-check"></i>
-
-              Confirm Appointment
-            </button>
           </form>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+{% endblock %}
+{% block extra_js %}
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+        const doctorSelect =
+            document.getElementById(
+                'id_doctor'
+            );
+
+        const dateInput =
+            document.getElementById(
+                'id_date'
+            );
+
+        const timeSelect =
+            document.getElementById(
+                'id_time'
+            );
+
+        const slotMessage =
+            document.getElementById(
+                'slotMessage'
+            );
+
+
+        const slotUrl =
+            "{% url 'appointment_slots' %}";
+
+
+        async function loadAvailableSlots() {
+
+            const doctorId =
+                doctorSelect.value;
+
+            const selectedDate =
+                dateInput.value;
+
+
+            const oldValue =
+                timeSelect.value;
+
+
+            timeSelect.innerHTML = '';
+
+
+            const placeholder =
+                document.createElement(
+                    'option'
+                );
+
+            placeholder.value = '';
+
+            placeholder.textContent =
+                'Select an available time';
+
+            timeSelect.appendChild(
+                placeholder
+            );
+
+
+            if (
+                !doctorId
+                || !selectedDate
+            ) {
+
+                slotMessage.textContent =
+                    'Select a doctor and date to view available times.';
+
+                return;
+            }
+
+
+            timeSelect.disabled = true;
+
+            slotMessage.textContent =
+                'Loading available times...';
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${slotUrl}?doctor=${encodeURIComponent(doctorId)}&date=${encodeURIComponent(selectedDate)}`
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    slotMessage.textContent =
+                        data.error
+                        || 'Unable to load appointment times.';
+
+                    return;
+                }
+
+
+                if (
+                    data.slots.length === 0
+                ) {
+
+                    slotMessage.textContent =
+                        'No appointment times are available for this date.';
+
+                    return;
+                }
+
+
+                data.slots.forEach(
+                    function (slot) {
+
+                        const option =
+                            document.createElement(
+                                'option'
+                            );
+
+                        option.value =
+                            slot.value;
+
+                        option.textContent =
+                            slot.label;
+
+
+                        if (
+                            slot.value
+                            === oldValue
+                        ) {
+
+                            option.selected = true;
+
+                        }
+
+
+                        timeSelect.appendChild(
+                            option
+                        );
+
+                    }
+                );
+
+
+                slotMessage.textContent =
+                    `${data.slots.length} appointment time(s) available.`;
+
+
+            } catch (error) {
+
+                slotMessage.textContent =
+                    'Unable to load appointment times.';
+
+            } finally {
+
+                timeSelect.disabled = false;
+
+            }
+
+        }
+
+
+        doctorSelect.addEventListener(
+            'change',
+            loadAvailableSlots
+        );
+
+
+        dateInput.addEventListener(
+            'change',
+            loadAvailableSlots
+        );
+
+
+        if (
+            doctorSelect.value
+            && dateInput.value
+        ) {
+
+            loadAvailableSlots();
+
+        }
+
+    }
+);
+
+</script>
 
 {% endblock %}

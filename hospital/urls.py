@@ -28,4 +28,9 @@ urlpatterns = [
     views.doctor_schedule,
     name='doctor_schedule'
 ),
+    path(
+    'api/appointment-slots/',
+    views.appointment_slots,
+    name='appointment_slots'
+),
 ]
