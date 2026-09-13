@@ -1439,3 +1439,71 @@ border:1px solid #e5e8eb;
     background-color: #e3f0ff;
     color: #245d97;
 }
+/* ==========================================
+   DOCTOR SCHEDULE
+========================================== */
+
+.doctor-schedule-page {
+    background-color: #f6f9fa;
+    padding: 70px 0;
+}
+
+
+.schedule-card {
+    background-color: white;
+    border-radius: 16px;
+    padding: 35px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+
+.schedule-card h1,
+.schedule-card h3 {
+    color: #143447;
+    font-weight: 700;
+}
+
+
+.schedule-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e5e8eb;
+    padding: 20px 0;
+}
+
+
+.schedule-item:last-child {
+    border-bottom: 0;
+}
+
+
+.schedule-item h5 {
+    color: #143447;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+
+.schedule-item p {
+    margin-bottom: 4px;
+}
+
+
+.schedule-item i {
+    color: #007c91;
+}
+
+
+@media (max-width: 768px) {
+
+    .schedule-item {
+        display: block;
+    }
+
+
+    .schedule-item form {
+        margin-top: 15px;
+    }
+
+}

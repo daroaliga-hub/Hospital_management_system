@@ -264,39 +264,59 @@ Dr. {{ doctor.name }} | CarePoint Hospital
                     </h3>
 
 
-                    <div class="availability-card mt-3">
+                    {% for schedule in doctor.availability.all %}
 
-                        <i class="bi bi-calendar-week"></i>
+                        <div class="availability-card mt-3">
 
+                            <i class="bi bi-calendar-week"></i>
 
-                        <div>
+                            <div>
 
-                            <strong>
-                                Available Days
-                            </strong>
-
-                            {% if doctor.available_days %}
-
-                                <p>
-                                    {{ doctor.available_days }}
-                                </p>
-
-                            {% else %}
+                                <strong>
+                                    {{ schedule.get_weekday_display }}
+                                </strong>
 
                                 <p>
-                                    Contact the hospital for
-                                    current availability.
+                                    {{ schedule.start_time|time:"H:i" }}
+
+                                    -
+
+                                    {{ schedule.end_time|time:"H:i" }}
+
+                                    ·
+
+                                    {{ schedule.slot_duration }}
+                                    minute appointments
                                 </p>
 
-                            {% endif %}
+                            </div>
 
                         </div>
 
-                    </div>
+
+                    {% empty %}
+
+                        <div class="availability-card mt-3">
+
+                            <i class="bi bi-calendar-x"></i>
+
+                            <div>
+
+                                <strong>
+                                    Schedule unavailable
+                                </strong>
+
+                                <p>
+                                    Contact the hospital for availability.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
 
                 </div>
-
-            </div>
 
 
 

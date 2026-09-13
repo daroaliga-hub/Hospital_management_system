@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+My Schedule | CarePoint
+{% endblock %}
+
+
+{% block content %}
+
+<section class="doctor-schedule-page">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+
+            <!-- CURRENT SCHEDULE -->
+
+            <div class="col-lg-7">
+
+                <div class="schedule-card">
+
+                    <span class="section-small-title">
+                        DOCTOR PORTAL
+                    </span>
+
+                    <h1 class="mt-2">
+                        My Availability
+                    </h1>
+
+                    <p>
+                        Manage the days and times patients
+                        can book appointments with you.
+                    </p>
+
+
+                    <hr>
+
+
+                    {% for schedule in schedules %}
+
+                        <div class="schedule-item">
+
+                            <div>
+
+                                <h5>
+                                    {{ schedule.get_weekday_display }}
+                                </h5>
+
+                                <p>
+                                    <i class="bi bi-clock"></i>
+
+                                    {{ schedule.start_time|time:"H:i" }}
+
+                                    —
+
+                                    {{ schedule.end_time|time:"H:i" }}
+                                </p>
+
+                                <small>
+                                    {{ schedule.slot_duration }}
+                                    minute appointments
+                                </small>
+
+                            </div>
+
+
+                            <form
+                                method="POST"
+                                action="{% url 'delete_doctor_availability' schedule.id %}"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-sm btn-outline-danger"
+                                >
+                                    Remove
+                                </button>
+
+                            </form>
+
+                        </div>
+
+
+                    {% empty %}
+
+                        <div class="alert alert-info">
+
+                            You have not added any availability yet.
+
+                        </div>
+
+                    {% endfor %}
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ADD AVAILABILITY -->
+
+            <div class="col-lg-5">
+
+                <div class="schedule-card">
+
+                    <h3>
+                        Add Availability
+                    </h3>
+
+
+                    {% if form.non_field_errors %}
+
+                        <div class="alert alert-danger">
+
+                            {{ form.non_field_errors }}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Day
+                            </label>
+
+                            {{ form.weekday }}
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Start Time
+                            </label>
+
+                            {{ form.start_time }}
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                End Time
+                            </label>
+
+                            {{ form.end_time }}
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Appointment Duration
+                            </label>
+
+                            {{ form.slot_duration }}
+
+                            <small class="text-muted">
+                                Duration in minutes.
+                            </small>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100"
+                        >
+                            Add Availability
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

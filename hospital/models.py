@@ -80,6 +80,65 @@ class Doctor(models.Model):
 
         return f"Dr. {self.name} ({self.department})"
 
+class DoctorAvailability(models.Model):
+
+    WEEKDAY_CHOICES = [
+        (0, 'Monday'),
+        (1, 'Tuesday'),
+        (2, 'Wednesday'),
+        (3, 'Thursday'),
+        (4, 'Friday'),
+        (5, 'Saturday'),
+        (6, 'Sunday'),
+    ]
+
+    doctor = models.ForeignKey(
+        Doctor,
+        on_delete=models.CASCADE,
+        related_name='availability'
+    )
+
+    weekday = models.PositiveSmallIntegerField(
+        choices=WEEKDAY_CHOICES
+    )
+
+    start_time = models.TimeField()
+
+    end_time = models.TimeField()
+
+    slot_duration = models.PositiveIntegerField(
+        default=30,
+        help_text='Appointment length in minutes'
+    )
+
+    class Meta:
+
+        ordering = [
+            'weekday',
+            'start_time'
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    'doctor',
+                    'weekday',
+                    'start_time',
+                    'end_time'
+                ],
+                name='unique_doctor_availability'
+            )
+
+        ]
+
+    def __str__(self):
+
+        return (
+            f"{self.doctor.name} - "
+            f"{self.get_weekday_display()} "
+            f"{self.start_time} - {self.end_time}"
+        )
 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)

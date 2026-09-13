@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Appointment, Patient ,Doctor , Department
+from .models import Department, Doctor,DoctorAvailability, Patient, Appointment
+
 
 class PatientRegistrationForm(UserCreationForm):
 
@@ -349,3 +350,129 @@ class PatientProfileForm(forms.ModelForm):
             patient.save()
 
         return patient
+class DoctorAvailabilityForm(forms.ModelForm):
+
+    class Meta:
+
+        model = DoctorAvailability
+
+        fields = [
+            'weekday',
+            'start_time',
+            'end_time',
+            'slot_duration',
+        ]
+
+        widgets = {
+
+            'weekday': forms.Select(
+                attrs={
+                    'class': 'form-select'
+                }
+            ),
+
+            'start_time': forms.TimeInput(
+                attrs={
+                    'type': 'time',
+                    'class': 'form-control'
+                }
+            ),
+
+            'end_time': forms.TimeInput(
+                attrs={
+                    'type': 'time',
+                    'class': 'form-control'
+                }
+            ),
+
+            'slot_duration': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'min': 5,
+                    'step': 5
+                }
+            ),
+        }
+
+
+    def __init__(
+        self,
+        *args,
+        doctor=None,
+        **kwargs
+    ):
+
+        super().__init__(
+            *args,
+            **kwargs
+        )
+
+        self.doctor = doctor
+
+
+    def clean(self):
+
+        cleaned_data = super().clean()
+
+        weekday = cleaned_data.get(
+            'weekday'
+        )
+
+        start_time = cleaned_data.get(
+            'start_time'
+        )
+
+        end_time = cleaned_data.get(
+            'end_time'
+        )
+
+        slot_duration = cleaned_data.get(
+            'slot_duration'
+        )
+
+
+        if (
+            start_time
+            and end_time
+            and start_time >= end_time
+        ):
+
+            raise forms.ValidationError(
+                "End time must be later than start time."
+            )
+
+
+        if (
+            slot_duration
+            and slot_duration < 5
+        ):
+
+            raise forms.ValidationError(
+                "Appointment duration must be at least 5 minutes."
+            )
+
+
+        if (
+            self.doctor
+            and weekday is not None
+            and start_time
+            and end_time
+        ):
+
+            overlapping = (
+                DoctorAvailability.objects.filter(
+                    doctor=self.doctor,
+                    weekday=weekday,
+                    start_time__lt=end_time,
+                    end_time__gt=start_time
+                )
+            )
+
+            if overlapping.exists():
+
+                raise forms.ValidationError(
+                    "This schedule overlaps with an existing schedule."
+                )
+
+
+        return cleaned_data

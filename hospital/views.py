@@ -7,8 +7,10 @@ from django.db import transaction
 from django.views.decorators.http import require_POST
 from .decorators import doctor_required, patient_required
 from django.contrib.auth.models import Group
-from .models import Department, Doctor, Patient, Appointment
-from .forms import PatientRegistrationForm, AppointmentForm ,DoctorCreationForm, PatientProfileForm
+from .utils import doctor_is_available
+from django.utils import timezone
+from .models import Department, Doctor, Patient, Appointment, DoctorAvailability
+from .forms import PatientRegistrationForm, AppointmentForm ,DoctorCreationForm, PatientProfileForm,DoctorAvailabilityForm
 
 def home(request):
     departments = Department.objects.all()[:6]
@@ -265,7 +267,6 @@ def book_appointment(request):
                 commit=False
             )
 
-
             patient, created = Patient.objects.get_or_create(
                 user=request.user,
                 defaults={
@@ -280,7 +281,39 @@ def book_appointment(request):
                 appointment.doctor.department
             )
 
+            if appointment.date < timezone.localdate():
+                            
+                            messages.error(
+                                request,
+                                "You cannot book an appointment in the past."
+                            )
+            
+                            return render(
+                                request,
+                                'book_appointment.html',
+                                {
+                                    'form': form
+                                }
+                            )
+                            
+            if not doctor_is_available(
+                appointment.doctor,
+                appointment.date,
+                appointment.time
+            ):
 
+                messages.error(
+                    request,
+                    "The doctor is not available at the selected date and time."
+                )
+
+                return render(
+                    request,
+                    'book_appointment.html',
+                    {
+                        'form': form
+                    }
+                )
             existing = Appointment.objects.filter(
 
                 doctor=appointment.doctor,
@@ -833,4 +866,98 @@ def cancel_patient_appointment(
     return redirect(
         'appointment_detail',
         appointment_id=appointment.id
+    )
+@login_required
+@doctor_required
+def doctor_schedule(request):
+
+    doctor = get_object_or_404(
+        Doctor,
+        user=request.user
+    )
+
+
+    if request.method == 'POST':
+
+        form = DoctorAvailabilityForm(
+            request.POST,
+            doctor=doctor
+        )
+
+
+        if form.is_valid():
+
+            availability = form.save(
+                commit=False
+            )
+
+            availability.doctor = doctor
+
+            availability.save()
+
+
+            messages.success(
+                request,
+                "Availability added successfully."
+            )
+
+
+            return redirect(
+                'doctor_schedule'
+            )
+
+
+    else:
+
+        form = DoctorAvailabilityForm(
+            doctor=doctor
+        )
+
+
+    schedules = DoctorAvailability.objects.filter(
+        doctor=doctor
+    )
+
+
+    return render(
+        request,
+        'doctor/schedule.html',
+        {
+            'doctor': doctor,
+            'form': form,
+            'schedules': schedules,
+        }
+    )
+@login_required
+@doctor_required
+@require_POST
+def delete_doctor_availability(
+    request,
+    availability_id
+):
+
+    doctor = get_object_or_404(
+        Doctor,
+        user=request.user
+    )
+
+
+    availability = get_object_or_404(
+        DoctorAvailability,
+        id=availability_id,
+        doctor=doctor
+    )
+
+
+    availability.delete()
+
+
+    messages.success(
+        request,
+        "Availability removed."
+    )
+
+
+    return redirect(
+        'doctor_schedule'
     )
