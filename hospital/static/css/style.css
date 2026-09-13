@@ -1507,3 +1507,118 @@ border:1px solid #e5e8eb;
     }
 
 }
+/* ==========================================
+   DOCTOR DAILY WORKFLOW
+========================================== */
+
+.appointment-time-block {
+    min-width: 90px;
+    text-align: center;
+    color: #007c91;
+}
+
+
+.appointment-time-block i {
+    display: block;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+
+.doctor-appointment-main {
+    flex: 1;
+    padding: 0 25px;
+}
+
+
+.doctor-appointment-main h4 {
+    margin-bottom: 5px;
+}
+
+
+.doctor-appointment-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+.doctor-appointment-detail-page {
+    background-color: #f6f9fa;
+    padding: 70px 0;
+}
+
+
+.doctor-detail-card {
+    background-color: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+
+.doctor-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.doctor-detail-header h1 {
+    color: #143447;
+    font-weight: 700;
+}
+
+
+.doctor-detail-card h3 {
+    color: #143447;
+    font-weight: 700;
+}
+
+
+.doctor-detail-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+
+@media (max-width: 768px) {
+
+    .doctor-appointment-card {
+        display: block;
+    }
+
+
+    .doctor-appointment-main {
+        padding: 20px 0;
+    }
+
+
+    .doctor-appointment-actions {
+        margin-top: 15px;
+        flex-wrap: wrap;
+    }
+
+
+    .doctor-detail-header {
+        display: block;
+    }
+
+
+    .doctor-detail-header .status {
+        display: inline-block;
+        margin-top: 15px;
+    }
+
+
+    .doctor-detail-actions {
+        display: block;
+    }
+
+
+    .doctor-detail-actions > div {
+        margin-top: 15px;
+    }
+
+}

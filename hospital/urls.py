@@ -33,4 +33,9 @@ urlpatterns = [
     views.appointment_slots,
     name='appointment_slots'
 ),
+    path(
+    'doctor/appointments/<int:appointment_id>/',
+    views.doctor_appointment_detail,
+    name='doctor_appointment_detail'
+),
 ]

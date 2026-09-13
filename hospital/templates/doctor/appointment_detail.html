@@ -1,0 +1,357 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Patient Appointment | CarePoint
+{% endblock %}
+
+
+{% block content %}
+
+<section class="doctor-appointment-detail-page">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-9">
+
+                <div class="doctor-detail-card">
+
+
+                    <!-- HEADER -->
+
+                    <div class="doctor-detail-header">
+
+                        <div>
+
+                            <span class="section-small-title">
+                                DOCTOR PORTAL
+                            </span>
+
+                            <h1 class="mt-2">
+                                Appointment Details
+                            </h1>
+
+                        </div>
+
+
+                        <span class="status {{ appointment.status }}">
+
+                            {{ appointment.status|title }}
+
+                        </span>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <!-- REFERENCE -->
+
+                    <div class="appointment-reference">
+
+                        <small>
+                            Appointment Number
+                        </small>
+
+                        <strong>
+                            {{ appointment.appointment_number }}
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- PATIENT DETAILS -->
+
+                    <h3 class="mt-5">
+                        Patient Information
+                    </h3>
+
+
+                    <div class="row g-4 mt-1">
+
+                        <div class="col-md-6">
+
+                            <div class="detail-item">
+
+                                <span>
+                                    Patient Name
+                                </span>
+
+                                <strong>
+                                    {{ appointment.patient.full_name }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="detail-item">
+
+                                <span>
+                                    Date of Birth
+                                </span>
+
+                                <strong>
+                                    {{ appointment.patient.date_of_birth }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="detail-item">
+
+                                <span>
+                                    Gender
+                                </span>
+
+                                <strong>
+                                    {{ appointment.patient.gender }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="detail-item">
+
+                                <span>
+                                    Blood Group
+                                </span>
+
+                                <strong>
+                                    {{ appointment.patient.blood_group|default:"Not provided" }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="detail-item">
+
+                                <span>
+                                    Phone
+                                </span>
+
+                                <strong>
+                                    {{ appointment.patient.phone }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- APPOINTMENT -->
+
+                    <h3 class="mt-5">
+                        Visit Information
+                    </h3>
+
+
+                    <div class="row g-4 mt-1">
+
+                        <div class="col-md-6">
+
+                            <div class="detail-item">
+
+                                <span>
+                                    Date
+                                </span>
+
+                                <strong>
+                                    {{ appointment.date }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="detail-item">
+
+                                <span>
+                                    Time
+                                </span>
+
+                                <strong>
+                                    {{ appointment.time }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <div class="detail-item">
+
+                                <span>
+                                    Symptoms / Reason for Visit
+                                </span>
+
+                                <strong>
+                                    {{ appointment.symptoms|default:"No symptoms provided" }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- EXISTING NOTES -->
+
+                    {% if appointment.medical_notes %}
+
+                        <div class="medical-notes-box mt-5">
+
+                            <h4>
+                                Medical Notes
+                            </h4>
+
+                            <p>
+                                {{ appointment.medical_notes|linebreaks }}
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="doctor-detail-actions mt-5">
+
+                        <a
+                            href="{% url 'doctor_dashboard' %}"
+                            class="btn btn-outline-secondary"
+                        >
+                            <i class="bi bi-arrow-left"></i>
+
+                            Dashboard
+                        </a>
+
+
+                        <div>
+
+
+                            {% if appointment.status == "pending" %}
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'update_appointment_status' appointment.id 'confirmed' %}"
+                                    class="d-inline"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-success"
+                                    >
+                                        Confirm
+                                    </button>
+
+                                </form>
+
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'update_appointment_status' appointment.id 'cancelled' %}"
+                                    class="d-inline"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-outline-danger"
+                                    >
+                                        Cancel
+                                    </button>
+
+                                </form>
+
+
+                            {% elif appointment.status == "confirmed" %}
+
+                                <a
+                                    href="{% url 'add_medical_notes' appointment.id %}"
+                                    class="btn btn-primary"
+                                >
+                                    Add Medical Notes
+                                </a>
+
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'update_appointment_status' appointment.id 'cancelled' %}"
+                                    class="d-inline"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-outline-danger"
+                                    >
+                                        Cancel
+                                    </button>
+
+                                </form>
+
+
+                            {% elif appointment.status == "completed" %}
+
+                                <a
+                                    href="{% url 'add_medical_notes' appointment.id %}"
+                                    class="btn btn-outline-primary"
+                                >
+                                    Edit Medical Notes
+                                </a>
+
+                            {% endif %}
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

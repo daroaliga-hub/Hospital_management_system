@@ -479,43 +479,71 @@ def user_logout(request):
 @doctor_required
 def doctor_dashboard(request):
 
-    try:
+    doctor = get_object_or_404(
+        Doctor,
+        user=request.user
+    )
 
-        doctor = request.user.doctor
-
-
-    except Doctor.DoesNotExist:
-
-        messages.error(
-            request,
-            "You are not registered as a doctor."
-        )
-
-        return redirect('home')
-
+    today = timezone.localdate()
 
 
     appointments = Appointment.objects.filter(
         doctor=doctor
-    ).order_by(
-        '-date',
-        '-time'
+    ).select_related(
+        'patient',
+        'department'
     )
 
+
+    # -----------------------------------
+    # TODAY
+    # -----------------------------------
+
+    today_appointments = appointments.filter(
+        date=today
+    ).exclude(
+        status='cancelled'
+    ).order_by(
+        'time'
+    )
+
+
+    # -----------------------------------
+    # PENDING REQUESTS
+    # -----------------------------------
 
     pending = appointments.filter(
-        status='pending'
+        status='pending',
+        date__gte=today
+    ).order_by(
+        'date',
+        'time'
     )
 
 
-    confirmed = appointments.filter(
-        status='confirmed'
-    )
+    # -----------------------------------
+    # UPCOMING CONFIRMED
+    # -----------------------------------
 
+    upcoming = appointments.filter(
+        status='confirmed',
+        date__gt=today
+    ).order_by(
+        'date',
+        'time'
+    )[:5]
+
+
+    # -----------------------------------
+    # COMPLETED
+    # -----------------------------------
 
     completed = appointments.filter(
         status='completed'
-    )
+    ).order_by(
+        '-date',
+        '-time'
+    )[:5]
 
 
     return render(
@@ -523,9 +551,10 @@ def doctor_dashboard(request):
         'doctor/dashboard.html',
         {
             'doctor': doctor,
-            'appointments': appointments,
+            'today': today,
+            'today_appointments': today_appointments,
             'pending': pending,
-            'confirmed': confirmed,
+            'upcoming': upcoming,
             'completed': completed,
         }
     )
@@ -1141,5 +1170,37 @@ def appointment_slots(request):
     return JsonResponse(
         {
             'slots': slot_data
+        }
+    )
+@login_required
+@doctor_required
+def doctor_appointment_detail(
+    request,
+    appointment_id
+):
+
+    doctor = get_object_or_404(
+        Doctor,
+        user=request.user
+    )
+
+
+    appointment = get_object_or_404(
+        Appointment.objects.select_related(
+            'patient',
+            'department',
+            'doctor'
+        ),
+        id=appointment_id,
+        doctor=doctor
+    )
+
+
+    return render(
+        request,
+        'doctor/appointment_detail.html',
+        {
+            'doctor': doctor,
+            'appointment': appointment,
         }
     )
