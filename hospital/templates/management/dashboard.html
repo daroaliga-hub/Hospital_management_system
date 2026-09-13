@@ -1,0 +1,492 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Hospital Administration | CarePoint
+{% endblock %}
+
+
+{% block content %}
+
+<section class="admin-dashboard">
+
+    <div class="container">
+
+
+        <!-- ================================= -->
+        <!-- HEADER -->
+        <!-- ================================= -->
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <span class="section-small-title">
+                    HOSPITAL ADMINISTRATION
+                </span>
+
+                <h1>
+                    Administration Dashboard
+                </h1>
+
+                <p>
+                    {{ today }}
+                </p>
+
+            </div>
+
+
+            <div class="d-flex gap-2">
+
+                <a
+                    href="{% url 'create_doctor' %}"
+                    class="btn btn-primary"
+                >
+                    <i class="bi bi-person-plus"></i>
+
+                    Add Doctor
+                </a>
+
+
+                <a
+                    href="{% url 'admin:index' %}"
+                    class="btn btn-outline-primary"
+                >
+                    <i class="bi bi-gear"></i>
+
+                    Django Admin
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- STATISTICS -->
+        <!-- ================================= -->
+
+        <div class="row g-4 mt-4">
+
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="admin-stat-card">
+
+                    <div class="admin-stat-icon">
+
+                        <i class="bi bi-people"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            {{ total_patients }}
+                        </h3>
+
+                        <p>
+                            Patients
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="admin-stat-card">
+
+                    <div class="admin-stat-icon">
+
+                        <i class="bi bi-person-badge"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            {{ total_doctors }}
+                        </h3>
+
+                        <p>
+                            Doctors
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="admin-stat-card">
+
+                    <div class="admin-stat-icon">
+
+                        <i class="bi bi-calendar-day"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            {{ today_appointments.count }}
+                        </h3>
+
+                        <p>
+                            Today's Visits
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="admin-stat-card">
+
+                    <div class="admin-stat-icon">
+
+                        <i class="bi bi-hourglass-split"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            {{ pending_appointments.count }}
+                        </h3>
+
+                        <p>
+                            Pending Requests
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ================================= -->
+        <!-- QUICK MANAGEMENT -->
+        <!-- ================================= -->
+
+        <div class="dashboard-section mt-5">
+
+            <h2>
+                Hospital Management
+            </h2>
+
+
+            <div class="row g-4 mt-3">
+
+
+                <div class="col-md-6 col-lg-3">
+
+                    <a
+                        href="{% url 'create_doctor' %}"
+                        class="admin-action-card"
+                    >
+
+                        <i class="bi bi-person-plus"></i>
+
+                        <h5>
+                            Add Doctor
+                        </h5>
+
+                        <p>
+                            Create a doctor account and profile.
+                        </p>
+
+                    </a>
+
+                </div>
+
+
+                <div class="col-md-6 col-lg-3">
+
+                    <a
+                        href="{% url 'admin:hospital_doctor_changelist' %}"
+                        class="admin-action-card"
+                    >
+
+                        <i class="bi bi-person-badge"></i>
+
+                        <h5>
+                            Manage Doctors
+                        </h5>
+
+                        <p>
+                            Review and edit doctor information.
+                        </p>
+
+                    </a>
+
+                </div>
+
+
+                <div class="col-md-6 col-lg-3">
+
+                    <a
+                        href="{% url 'admin:hospital_patient_changelist' %}"
+                        class="admin-action-card"
+                    >
+
+                        <i class="bi bi-people"></i>
+
+                        <h5>
+                            Manage Patients
+                        </h5>
+
+                        <p>
+                            Review registered patient profiles.
+                        </p>
+
+                    </a>
+
+                </div>
+
+
+                <div class="col-md-6 col-lg-3">
+
+                    <a
+                        href="{% url 'admin:hospital_department_changelist' %}"
+                        class="admin-action-card"
+                    >
+
+                        <i class="bi bi-building"></i>
+
+                        <h5>
+                            Departments
+                        </h5>
+
+                        <p>
+                            Manage hospital departments.
+                        </p>
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================================= -->
+        <!-- RECENT APPOINTMENTS -->
+        <!-- ================================= -->
+
+        <div class="dashboard-section mt-5">
+
+            <div class="section-title-row">
+
+                <h2>
+                    Recent Appointments
+                </h2>
+
+
+                <a
+                    href="{% url 'admin:hospital_appointment_changelist' %}"
+                >
+                    View All
+                </a>
+
+            </div>
+
+
+            <div class="table-responsive mt-3">
+
+                <table class="table align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                #
+                            </th>
+
+                            <th>
+                                Patient
+                            </th>
+
+                            <th>
+                                Doctor
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Time
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for appointment in recent_appointments %}
+
+                            <tr>
+
+                                <td>
+                                    {{ appointment.appointment_number }}
+                                </td>
+
+                                <td>
+                                    {{ appointment.patient.full_name }}
+                                </td>
+
+                                <td>
+                                    Dr. {{ appointment.doctor.name }}
+                                </td>
+
+                                <td>
+                                    {{ appointment.date }}
+                                </td>
+
+                                <td>
+                                    {{ appointment.time }}
+                                </td>
+
+                                <td>
+
+                                    <span
+                                        class="status {{ appointment.status }}"
+                                    >
+                                        {{ appointment.status|title }}
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="text-center text-muted"
+                                >
+                                    No appointments found.
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================================= -->
+        <!-- DEPARTMENTS -->
+        <!-- ================================= -->
+
+        <div class="dashboard-section mt-5">
+
+            <h2>
+                Department Overview
+            </h2>
+
+
+            <div class="row g-4 mt-2">
+
+                {% for department in department_stats %}
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <div class="department-stat-card">
+
+                            <h4>
+                                {{ department.name }}
+                            </h4>
+
+
+                            <div class="department-stat-row">
+
+                                <span>
+                                    Doctors
+                                </span>
+
+                                <strong>
+                                    {{ department.doctor_count }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="department-stat-row">
+
+                                <span>
+                                    Appointments
+                                </span>
+
+                                <strong>
+                                    {{ department.appointment_count }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                {% empty %}
+
+                    <div class="col-12">
+
+                        <div class="alert alert-info">
+
+                            No departments have been created.
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

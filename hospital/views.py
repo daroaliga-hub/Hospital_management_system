@@ -5,9 +5,10 @@ from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db import transaction
 from django.views.decorators.http import require_POST
-from .decorators import doctor_required, patient_required
+from .decorators import doctor_required, patient_required ,admin_required
 from django.contrib.auth.models import Group
 from .utils import doctor_is_available , get_available_time_slots
+from django.db.models import Count
 from django.utils import timezone
 from .models import Department, Doctor, Patient, Appointment, DoctorAvailability
 from .forms import PatientRegistrationForm, AppointmentForm ,DoctorCreationForm, PatientProfileForm,DoctorAvailabilityForm
@@ -706,10 +707,10 @@ def add_medical_notes(
 def login_redirect(request):
 
     if request.user.is_superuser or request.user.is_staff:
-
         return redirect(
-            'admin:index'
+            'hospital_admin_dashboard'
         )
+
 
 
     if request.user.groups.filter(
@@ -1202,5 +1203,110 @@ def doctor_appointment_detail(
         {
             'doctor': doctor,
             'appointment': appointment,
+        }
+    )
+@login_required
+@admin_required
+def hospital_admin_dashboard(request):
+
+    today = timezone.localdate()
+
+
+    # -----------------------------------
+    # MAIN STATISTICS
+    # -----------------------------------
+
+    total_patients = Patient.objects.count()
+
+    total_doctors = Doctor.objects.count()
+
+    total_departments = Department.objects.count()
+
+
+    today_appointments = Appointment.objects.filter(
+        date=today
+    )
+    confirmed_today = today_appointments.filter(
+        status='confirmed'
+    ).count()
+
+
+    completed_today = today_appointments.filter(
+        status='completed'
+    ).count()
+
+
+    pending_appointments = Appointment.objects.filter(
+        status='pending'
+    )
+
+
+    # -----------------------------------
+    # RECENT APPOINTMENTS
+    # -----------------------------------
+
+    recent_appointments = (
+        Appointment.objects.select_related(
+            'patient',
+            'doctor',
+            'department'
+        )
+        .order_by(
+            '-created_at'
+        )[:8]
+    )
+
+
+    # -----------------------------------
+    # DEPARTMENT STATISTICS
+    # -----------------------------------
+
+    department_stats = (
+        Department.objects.annotate(
+            doctor_count=Count(
+                'doctor',
+                distinct=True
+            ),
+            appointment_count=Count(
+                'appointment',
+                distinct=True
+            )
+        )
+        .order_by(
+            '-appointment_count'
+        )
+    )
+
+
+    return render(
+        request,
+        'management/dashboard.html',
+        {
+            'today': today,
+
+            'total_patients':
+                total_patients,
+
+            'total_doctors':
+                total_doctors,
+
+            'total_departments':
+                total_departments,
+
+            'today_appointments':
+                today_appointments,
+
+            'pending_appointments':
+                pending_appointments,
+            'confirmed_today': 
+                confirmed_today,
+            'completed_today': 
+                completed_today,
+
+            'recent_appointments':
+                recent_appointments,
+
+            'department_stats':
+                department_stats,
         }
     )

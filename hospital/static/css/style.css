@@ -1622,3 +1622,125 @@ border:1px solid #e5e8eb;
     }
 
 }
+/* ==========================================
+   HOSPITAL ADMIN DASHBOARD
+========================================== */
+
+.admin-dashboard {
+    background-color: #f6f9fa;
+    padding: 70px 0;
+}
+
+
+.admin-stat-card {
+    background-color: white;
+    border-radius: 15px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    height: 100%;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+
+.admin-stat-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+    background-color: #e5f6f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.admin-stat-icon i {
+    color: #007c91;
+    font-size: 28px;
+}
+
+
+.admin-stat-card h3 {
+    color: #143447;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+
+.admin-stat-card p {
+    margin: 0;
+    color: #697a84;
+}
+
+
+.admin-action-card {
+    display: block;
+    height: 100%;
+    background-color: #f1f8fa;
+    border-radius: 12px;
+    padding: 28px;
+    color: #263746;
+    transition: 0.3s;
+}
+
+
+.admin-action-card:hover {
+    transform: translateY(-5px);
+    color: #007c91;
+}
+
+
+.admin-action-card i {
+    font-size: 32px;
+    color: #007c91;
+}
+
+
+.admin-action-card h5 {
+    color: #143447;
+    font-weight: 700;
+    margin-top: 15px;
+}
+
+
+.department-stat-card {
+    background-color: #f8fbfc;
+    border: 1px solid #e5e8eb;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+
+.department-stat-card h4 {
+    color: #143447;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+
+.department-stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+
+.department-stat-row + .department-stat-row {
+    border-top: 1px solid #e5e8eb;
+}
+
+
+@media (max-width: 768px) {
+
+    .admin-dashboard .dashboard-header {
+        display: block;
+    }
+
+
+    .admin-dashboard .dashboard-header > div:last-child {
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+
+}

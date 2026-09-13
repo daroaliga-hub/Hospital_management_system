@@ -38,4 +38,9 @@ urlpatterns = [
     views.doctor_appointment_detail,
     name='doctor_appointment_detail'
 ),
+    path(
+    'management/',
+    views.hospital_admin_dashboard,
+    name='hospital_admin_dashboard'
+),
 ]
