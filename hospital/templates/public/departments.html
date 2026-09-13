@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Departments | CarePoint
+{% endblock %}
+
+
+{% block content %}
+
+<section class="public-page-hero">
+
+    <div class="container">
+
+        <span class="section-small-title">
+            OUR DEPARTMENTS
+        </span>
+
+        <h1>
+            Specialized Care for Every Patient
+        </h1>
+
+        <p>
+            Explore our hospital departments
+            and find the right medical team
+            for your healthcare needs.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section class="public-content-section">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+
+            {% for department in departments %}
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="department-public-card">
+
+                        <div class="public-card-icon">
+
+                            <i class="bi bi-hospital"></i>
+
+                        </div>
+
+
+                        <h3>
+                            {{ department.name }}
+                        </h3>
+
+
+                        <p class="text-muted">
+
+                            Dedicated specialists providing
+                            patient-focused care in
+                            {{ department.name }}.
+
+                        </p>
+
+
+                        <div class="department-doctor-count">
+
+                            <i class="bi bi-person-badge"></i>
+
+                            {{ department.doctor_count }}
+
+                            doctor{{ department.doctor_count|pluralize }}
+
+                        </div>
+
+
+                        <a
+                            href="{% url 'doctor_list' %}?department={{ department.id }}"
+                            class="btn btn-outline-primary mt-3"
+                        >
+                            View Doctors
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+            {% empty %}
+
+                <div class="col-12">
+
+                    <div class="alert alert-info">
+
+                        No departments are currently available.
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

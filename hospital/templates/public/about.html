@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+About Us | CarePoint
+{% endblock %}
+
+
+{% block content %}
+
+<section class="public-page-hero">
+
+    <div class="container">
+
+        <span class="section-small-title">
+            ABOUT CAREPOINT
+        </span>
+
+        <h1>
+            Healthcare Built Around People
+        </h1>
+
+        <p>
+            CarePoint combines compassionate care,
+            experienced medical professionals and
+            modern healthcare technology.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section class="public-content-section">
+
+    <div class="container">
+
+
+        <!-- ABOUT INTRO -->
+
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-6">
+
+                <span class="section-small-title">
+                    WHO WE ARE
+                </span>
+
+                <h2 class="public-section-title">
+
+                    A Modern Approach to
+                    Patient-Centered Healthcare
+
+                </h2>
+
+
+                <p>
+
+                    CarePoint was designed around
+                    one simple idea: healthcare
+                    should be easier to access,
+                    easier to understand and
+                    focused on the individual.
+
+                </p>
+
+
+                <p>
+
+                    Our medical teams work across
+                    multiple specialties to provide
+                    coordinated healthcare for
+                    patients and their families.
+
+                </p>
+
+
+                <a
+                    href="{% url 'doctor_list' %}"
+                    class="btn btn-primary mt-3"
+                >
+                    Meet Our Doctors
+                </a>
+
+            </div>
+
+
+            <div class="col-lg-6">
+
+                <div class="about-values-grid">
+
+                    <div class="about-value">
+
+                        <i class="bi bi-heart"></i>
+
+                        <h4>
+                            Compassion
+                        </h4>
+
+                        <p>
+                            Patients remain at the
+                            center of every decision.
+                        </p>
+
+                    </div>
+
+
+                    <div class="about-value">
+
+                        <i class="bi bi-shield-check"></i>
+
+                        <h4>
+                            Trust
+                        </h4>
+
+                        <p>
+                            We value responsible,
+                            transparent medical care.
+                        </p>
+
+                    </div>
+
+
+                    <div class="about-value">
+
+                        <i class="bi bi-people"></i>
+
+                        <h4>
+                            Teamwork
+                        </h4>
+
+                        <p>
+                            Medical professionals
+                            collaborate across specialties.
+                        </p>
+
+                    </div>
+
+
+                    <div class="about-value">
+
+                        <i class="bi bi-lightbulb"></i>
+
+                        <h4>
+                            Innovation
+                        </h4>
+
+                        <p>
+                            Technology helps make
+                            healthcare more accessible.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- MISSION -->
+
+        <div class="mission-section">
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+
+                    <div class="mission-card">
+
+                        <i class="bi bi-bullseye"></i>
+
+                        <h3>
+                            Our Mission
+                        </h3>
+
+                        <p>
+
+                            To provide accessible,
+                            compassionate and reliable
+                            healthcare while giving
+                            patients the tools they need
+                            to participate in their care.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <div class="mission-card">
+
+                        <i class="bi bi-eye"></i>
+
+                        <h3>
+                            Our Vision
+                        </h3>
+
+                        <p>
+
+                            To create a connected
+                            healthcare experience where
+                            patients, doctors and hospital
+                            teams can work together
+                            efficiently.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

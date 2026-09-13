@@ -1744,3 +1744,258 @@ border:1px solid #e5e8eb;
     }
 
 }
+/* ==========================================
+   PUBLIC CONTENT PAGES
+========================================== */
+
+.public-page-hero {
+    background-color: #eaf6f8;
+    padding: 80px 0;
+}
+
+
+.public-page-hero h1 {
+    color: #143447;
+    font-size: 48px;
+    font-weight: 700;
+    max-width: 750px;
+    margin-top: 10px;
+}
+
+
+.public-page-hero p {
+    color: #61747f;
+    font-size: 18px;
+    max-width: 700px;
+    margin-top: 20px;
+}
+
+
+.public-content-section {
+    padding: 80px 0;
+}
+
+
+.public-section-title {
+    color: #143447;
+    font-weight: 700;
+    margin: 12px 0 20px;
+}
+
+
+/* SERVICE + DEPARTMENT CARDS */
+
+.service-public-card,
+.department-public-card {
+    background-color: white;
+    border: 1px solid #e7ecef;
+    border-radius: 16px;
+    padding: 30px;
+    height: 100%;
+    transition: 0.25s;
+}
+
+
+.service-public-card:hover,
+.department-public-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+}
+
+
+.service-public-card h3,
+.department-public-card h3 {
+    color: #143447;
+    font-weight: 700;
+    margin-top: 20px;
+}
+
+
+.public-card-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    background-color: #e6f6f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.public-card-icon i {
+    color: #007c91;
+    font-size: 28px;
+}
+
+
+.department-doctor-count {
+    color: #697b85;
+    margin-top: 20px;
+}
+
+
+/* CTA */
+
+.public-page-cta {
+    background-color: #143447;
+    border-radius: 18px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.public-page-cta h2 {
+    color: white;
+    font-weight: 700;
+}
+
+
+.public-page-cta p {
+    color: #d5e2e7;
+    margin-bottom: 0;
+}
+
+
+/* LOCATIONS */
+
+.location-card {
+    background-color: white;
+    border: 1px solid #e7ecef;
+    border-radius: 16px;
+    padding: 32px;
+    height: 100%;
+}
+
+
+.location-card h3 {
+    color: #143447;
+    font-weight: 700;
+    margin: 20px 0;
+}
+
+
+.location-card p {
+    color: #657780;
+}
+
+
+.location-card p i {
+    color: #007c91;
+    margin-right: 8px;
+}
+
+
+.location-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    background-color: #e6f6f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.location-icon i {
+    color: #007c91;
+    font-size: 28px;
+}
+
+
+/* ABOUT */
+
+.about-values-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+
+.about-value {
+    background-color: #f4f9fa;
+    border-radius: 15px;
+    padding: 25px;
+}
+
+
+.about-value i {
+    color: #007c91;
+    font-size: 30px;
+}
+
+
+.about-value h4 {
+    color: #143447;
+    font-weight: 700;
+    margin-top: 15px;
+}
+
+
+.mission-section {
+    margin-top: 80px;
+}
+
+
+.mission-card {
+    background-color: #143447;
+    border-radius: 16px;
+    padding: 35px;
+    height: 100%;
+}
+
+
+.mission-card i {
+    color: #79d4dc;
+    font-size: 34px;
+}
+
+
+.mission-card h3 {
+    color: white;
+    font-weight: 700;
+    margin-top: 20px;
+}
+
+
+.mission-card p {
+    color: #d5e3e7;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .public-page-hero {
+        padding: 55px 0;
+    }
+
+
+    .public-page-hero h1 {
+        font-size: 36px;
+    }
+
+
+    .public-content-section {
+        padding: 55px 0;
+    }
+
+
+    .public-page-cta {
+        display: block;
+    }
+
+
+    .public-page-cta .btn {
+        margin-top: 20px;
+        width: 100%;
+    }
+
+
+    .about-values-grid {
+        grid-template-columns: 1fr;
+    }
+
+}

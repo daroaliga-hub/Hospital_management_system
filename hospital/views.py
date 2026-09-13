@@ -24,6 +24,48 @@ def home(request):
         'departments': departments
     }
 )
+def services(request):
+
+    return render(
+        request,
+        'public/services.html'
+    )
+
+def departments(request):
+
+    departments = (
+        Department.objects.annotate(
+            doctor_count=Count(
+                'doctor',
+                distinct=True
+            )
+        )
+        .order_by('name')
+    )
+
+    return render(
+        request,
+        'public/departments.html',
+        {
+            'departments': departments
+        }
+    )
+
+
+def locations(request):
+
+    return render(
+        request,
+        'public/locations.html'
+    )
+
+
+def about(request):
+
+    return render(
+        request,
+        'public/about.html'
+    )
 
 def doctor_list(request):
 

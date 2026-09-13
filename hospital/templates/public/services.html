@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Medical Services | CarePoint
+{% endblock %}
+
+
+{% block content %}
+
+<section class="public-page-hero">
+
+    <div class="container">
+
+        <span class="section-small-title">
+            MEDICAL SERVICES
+        </span>
+
+        <h1>
+            Comprehensive Healthcare Services
+        </h1>
+
+        <p>
+            From preventive care to specialized
+            treatment, CarePoint provides services
+            designed around every stage of your health.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section class="public-content-section">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+
+            <!-- PRIMARY CARE -->
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="service-public-card">
+
+                    <div class="public-card-icon">
+
+                        <i class="bi bi-heart-pulse"></i>
+
+                    </div>
+
+                    <h3>
+                        Primary Care
+                    </h3>
+
+                    <p>
+                        Routine examinations,
+                        preventive healthcare,
+                        health screenings and
+                        ongoing medical support.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- EMERGENCY -->
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="service-public-card">
+
+                    <div class="public-card-icon">
+
+                        <i class="bi bi-hospital"></i>
+
+                    </div>
+
+                    <h3>
+                        Emergency Care
+                    </h3>
+
+                    <p>
+                        Medical support for urgent
+                        conditions requiring immediate
+                        assessment and treatment.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SPECIALIST -->
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="service-public-card">
+
+                    <div class="public-card-icon">
+
+                        <i class="bi bi-person-badge"></i>
+
+                    </div>
+
+                    <h3>
+                        Specialist Care
+                    </h3>
+
+                    <p>
+                        Access doctors from multiple
+                        specialties for advanced
+                        diagnosis and treatment.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- DIAGNOSTICS -->
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="service-public-card">
+
+                    <div class="public-card-icon">
+
+                        <i class="bi bi-activity"></i>
+
+                    </div>
+
+                    <h3>
+                        Diagnostic Services
+                    </h3>
+
+                    <p>
+                        Clinical testing and diagnostic
+                        support to help doctors make
+                        informed treatment decisions.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- PREVENTIVE -->
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="service-public-card">
+
+                    <div class="public-card-icon">
+
+                        <i class="bi bi-shield-check"></i>
+
+                    </div>
+
+                    <h3>
+                        Preventive Health
+                    </h3>
+
+                    <p>
+                        Health assessments,
+                        screenings and preventive
+                        programs designed to maintain
+                        long-term wellness.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FOLLOW UP -->
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="service-public-card">
+
+                    <div class="public-card-icon">
+
+                        <i class="bi bi-clipboard2-pulse"></i>
+
+                    </div>
+
+                    <h3>
+                        Follow-Up Care
+                    </h3>
+
+                    <p>
+                        Continued medical monitoring
+                        and follow-up consultations
+                        after treatment.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="public-page-cta mt-5">
+
+            <div>
+
+                <h2>
+                    Need to see a specialist?
+                </h2>
+
+                <p>
+                    Browse our medical team and
+                    schedule an appointment online.
+                </p>
+
+            </div>
+
+
+            <a
+                href="{% url 'doctor_list' %}"
+                class="btn btn-primary btn-lg"
+            >
+                Find a Doctor
+            </a>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Locations | CarePoint
+{% endblock %}
+
+
+{% block content %}
+
+<section class="public-page-hero">
+
+    <div class="container">
+
+        <span class="section-small-title">
+            OUR LOCATIONS
+        </span>
+
+        <h1>
+            Healthcare Close to You
+        </h1>
+
+        <p>
+            Find CarePoint facilities and
+            medical services near you.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section class="public-content-section">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+
+            <!-- MAIN HOSPITAL -->
+
+            <div class="col-lg-4">
+
+                <div class="location-card">
+
+                    <div class="location-icon">
+
+                        <i class="bi bi-hospital"></i>
+
+                    </div>
+
+
+                    <h3>
+                        CarePoint Main Hospital
+                    </h3>
+
+
+                    <p>
+
+                        <i class="bi bi-geo-alt"></i>
+
+                        123 Health Avenue
+                        <br>
+
+                        Central District
+
+                    </p>
+
+
+                    <p>
+
+                        <i class="bi bi-telephone"></i>
+
+                        +1 (555) 010-1000
+
+                    </p>
+
+
+                    <p>
+
+                        <i class="bi bi-clock"></i>
+
+                        Open 24 hours
+
+                    </p>
+
+
+                    <a
+                        href="{% url 'doctor_list' %}"
+                        class="btn btn-outline-primary"
+                    >
+                        Find a Doctor
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NORTH CLINIC -->
+
+            <div class="col-lg-4">
+
+                <div class="location-card">
+
+                    <div class="location-icon">
+
+                        <i class="bi bi-building"></i>
+
+                    </div>
+
+
+                    <h3>
+                        CarePoint North Clinic
+                    </h3>
+
+
+                    <p>
+
+                        <i class="bi bi-geo-alt"></i>
+
+                        45 North Medical Drive
+                        <br>
+
+                        North District
+
+                    </p>
+
+
+                    <p>
+
+                        <i class="bi bi-telephone"></i>
+
+                        +1 (555) 010-2000
+
+                    </p>
+
+
+                    <p>
+
+                        <i class="bi bi-clock"></i>
+
+                        Mon–Fri: 8:00–18:00
+
+                    </p>
+
+
+                    <a
+                        href="{% url 'doctor_list' %}"
+                        class="btn btn-outline-primary"
+                    >
+                        Find a Doctor
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- WEST CENTER -->
+
+            <div class="col-lg-4">
+
+                <div class="location-card">
+
+                    <div class="location-icon">
+
+                        <i class="bi bi-buildings"></i>
+
+                    </div>
+
+
+                    <h3>
+                        CarePoint West Medical Center
+                    </h3>
+
+
+                    <p>
+
+                        <i class="bi bi-geo-alt"></i>
+
+                        78 Wellness Street
+                        <br>
+
+                        West District
+
+                    </p>
+
+
+                    <p>
+
+                        <i class="bi bi-telephone"></i>
+
+                        +1 (555) 010-3000
+
+                    </p>
+
+
+                    <p>
+
+                        <i class="bi bi-clock"></i>
+
+                        Mon–Sat: 8:00–20:00
+
+                    </p>
+
+
+                    <a
+                        href="{% url 'doctor_list' %}"
+                        class="btn btn-outline-primary"
+                    >
+                        Find a Doctor
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
