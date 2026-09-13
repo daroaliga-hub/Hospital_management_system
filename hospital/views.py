@@ -7,10 +7,10 @@ from django.db import transaction
 from django.views.decorators.http import require_POST
 from .decorators import doctor_required, patient_required ,admin_required
 from django.contrib.auth.models import Group
-from .utils import doctor_is_available , get_available_time_slots
+from .utils import doctor_is_available , get_available_time_slots,create_notification
 from django.db.models import Count
 from django.utils import timezone
-from .models import Department, Doctor, Patient, Appointment, DoctorAvailability
+from .models import Department, Doctor, Patient, Appointment, DoctorAvailability,Notification
 from .forms import PatientRegistrationForm, AppointmentForm ,DoctorCreationForm, PatientProfileForm,DoctorAvailabilityForm
 from datetime import datetime
 from django.http import JsonResponse
@@ -458,6 +458,22 @@ def book_appointment(request):
             else:
 
                 appointment.save()
+                if appointment.doctor.user:
+
+                    create_notification(
+                        recipient=appointment.doctor.user,
+
+                        notification_type='appointment_requested',
+
+                        message=(
+                            f"New appointment request from "
+                            f"{appointment.patient.full_name} "
+                            f"for {appointment.date} "
+                            f"at {appointment.time.strftime('%H:%M')}."
+                        ),
+
+                        appointment=appointment
+                    )
 
 
                 messages.success(
@@ -663,7 +679,24 @@ def update_appointment_status(
     appointment.save(
         update_fields=['status']
     )
+    if appointment.doctor.user:
 
+        create_notification(
+            recipient=appointment.doctor.user,
+
+            notification_type='appointment_cancelled',
+
+            message=(
+                f"{appointment.patient.full_name} "
+                f"cancelled the appointment scheduled "
+                f"for {appointment.date} "
+                f"at {appointment.time.strftime('%H:%M')}."
+            ),
+
+            appointment=appointment
+        )
+
+    
 
     messages.success(
         request,
@@ -674,6 +707,7 @@ def update_appointment_status(
     return redirect(
         'doctor_dashboard'
     )
+
 @login_required
 @doctor_required
 def add_medical_notes(
@@ -709,12 +743,12 @@ def add_medical_notes(
 
 
     if request.method == "POST":
-
         notes = request.POST.get(
             "medical_notes",
             ""
         ).strip()
 
+        previous_status = appointment.status
 
         appointment.medical_notes = notes
 
@@ -726,7 +760,41 @@ def add_medical_notes(
                 'status'
             ]
         )
+        if appointment.patient.user:
 
+            if previous_status != 'completed':
+
+                create_notification(
+                    recipient=appointment.patient.user,
+
+                    notification_type='appointment_completed',
+
+                    message=(
+                        f"Your appointment with "
+                        f"Dr. {appointment.doctor.name} "
+                        f"is complete. Medical notes "
+                        f"are now available."
+                    ),
+
+                    appointment=appointment
+                )
+
+
+            else:
+
+                create_notification(
+                    recipient=appointment.patient.user,
+
+                    notification_type='medical_notes_updated',
+
+                    message=(
+                        f"Dr. {appointment.doctor.name} "
+                        f"updated the medical notes "
+                        f"for your appointment."
+                    ),
+
+                    appointment=appointment
+                )
 
         messages.success(
             request,
@@ -1351,4 +1419,107 @@ def hospital_admin_dashboard(request):
             'department_stats':
                 department_stats,
         }
+    )
+@login_required
+def notifications_list(request):
+
+    notifications = (
+        Notification.objects.filter(
+            recipient=request.user
+        )
+        .select_related(
+            'appointment',
+            'appointment__doctor',
+            'appointment__patient'
+        )
+    )
+
+
+    return render(
+        request,
+        'notifications/list.html',
+        {
+            'notifications':
+                notifications
+        }
+    )
+@login_required
+@require_POST
+def open_notification(
+    request,
+    notification_id
+):
+
+    notification = get_object_or_404(
+        Notification,
+        id=notification_id,
+        recipient=request.user
+    )
+
+
+    if not notification.is_read:
+
+        notification.is_read = True
+
+        notification.save(
+            update_fields=[
+                'is_read'
+            ]
+        )
+
+
+    appointment = (
+        notification.appointment
+    )
+
+
+    if appointment:
+
+        # Doctor opening notification
+        if (
+            appointment.doctor.user_id
+            == request.user.id
+        ):
+
+            return redirect(
+                'doctor_appointment_detail',
+                appointment_id=appointment.id
+            )
+
+
+        # Patient opening notification
+        if (
+            appointment.patient.user_id
+            == request.user.id
+        ):
+
+            return redirect(
+                'appointment_detail',
+                appointment_id=appointment.id
+            )
+
+
+    return login_redirect(request)
+@login_required
+@require_POST
+def mark_all_notifications_read(
+    request
+):
+
+    Notification.objects.filter(
+        recipient=request.user,
+        is_read=False
+    ).update(
+        is_read=True
+    )
+
+
+    messages.success(
+        request,
+        "All notifications marked as read."
+    )
+
+
+    return redirect(
+        'notifications'
     )

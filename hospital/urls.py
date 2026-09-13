@@ -34,7 +34,7 @@ path(
     path('book-appointment/', views.book_appointment, name='book_appointment'),
     path( 'doctor/<int:id>/', views.doctor_profile, name='doctor_profile'),
     path( 'doctor-dashboard/', views.doctor_dashboard, name='doctor_dashboard'),
-    path( 'appointment/<int:appointment_id>/<str:status>/', views.update_appointment_status, name='update_appointment_status'),
+    path(  'appointment/<int:appointment_id>/status/<str:status>/', views.update_appointment_status, name='update_appointment_status'),
     path( 'appointment/<int:appointment_id>/notes/', views.add_medical_notes, name='add_medical_notes'),
     path( 'management/doctors/create/', views.create_doctor, name='create_doctor'),
     path( 'profile/', views.patient_profile, name='patient_profile'),
@@ -47,9 +47,9 @@ path(
     name='doctor_schedule'
 ),
     path(
-    'doctor/schedule/',
-    views.doctor_schedule,
-    name='doctor_schedule'
+    'doctor/schedule/<int:availability_id>/delete/',
+    views.delete_doctor_availability,
+    name='delete_doctor_availability'
 ),
     path(
     'api/appointment-slots/',
@@ -65,5 +65,20 @@ path(
     'management/',
     views.hospital_admin_dashboard,
     name='hospital_admin_dashboard'
+),
+path(
+    'notifications/',
+    views.notifications_list,
+    name='notifications'
+),
+path(
+    'notifications/<int:notification_id>/open/',
+    views.open_notification,
+    name='open_notification'
+),
+path(
+    'notifications/read-all/',
+    views.mark_all_notifications_read,
+    name='mark_all_notifications_read'
 ),
 ]

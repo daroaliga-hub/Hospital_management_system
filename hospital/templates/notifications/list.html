@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Notifications | CarePoint
+{% endblock %}
+
+
+{% block content %}
+
+<section class="notifications-page">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-9">
+
+
+                <!-- HEADER -->
+
+                <div class="notification-header">
+
+                    <div>
+
+                        <span class="section-small-title">
+                            CAREPOINT
+                        </span>
+
+                        <h1>
+                            Notifications
+                        </h1>
+
+                        <p>
+                            Appointment updates and
+                            activity from your account.
+                        </p>
+
+                    </div>
+
+
+                    {% if notifications %}
+
+                        <form
+                            method="POST"
+                            action="{% url 'mark_all_notifications_read' %}"
+                        >
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="btn btn-outline-primary"
+                            >
+                                Mark All as Read
+                            </button>
+
+                        </form>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- NOTIFICATIONS -->
+
+                <div class="notification-list mt-4">
+
+
+                    {% for notification in notifications %}
+
+                        <div
+                            class="
+                                notification-item
+                                {% if not notification.is_read %}
+                                    notification-unread
+                                {% endif %}
+                            "
+                        >
+
+
+                            <div class="notification-icon">
+
+
+                                {% if notification.notification_type == "appointment_confirmed" %}
+
+                                    <i class="bi bi-calendar-check"></i>
+
+
+                                {% elif notification.notification_type == "appointment_cancelled" %}
+
+                                    <i class="bi bi-calendar-x"></i>
+
+
+                                {% elif notification.notification_type == "appointment_completed" %}
+
+                                    <i class="bi bi-check-circle"></i>
+
+
+                                {% elif notification.notification_type == "medical_notes_updated" %}
+
+                                    <i class="bi bi-clipboard2-pulse"></i>
+
+
+                                {% else %}
+
+                                    <i class="bi bi-bell"></i>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                            <div class="notification-content">
+
+                                <p>
+                                    {{ notification.message }}
+                                </p>
+
+                                <small>
+                                    {{ notification.created_at|timesince }}
+                                    ago
+                                </small>
+
+                            </div>
+
+
+                            {% if notification.appointment %}
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'open_notification' notification.id %}"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-sm btn-outline-primary"
+                                    >
+                                        Open
+                                    </button>
+
+                                </form>
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    {% empty %}
+
+                        <div class="notification-empty">
+
+                            <i class="bi bi-bell"></i>
+
+                            <h3>
+                                No notifications
+                            </h3>
+
+                            <p>
+                                Appointment updates
+                                will appear here.
+                            </p>
+
+                        </div>
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

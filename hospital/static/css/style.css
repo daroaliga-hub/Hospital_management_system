@@ -1999,3 +1999,141 @@ border:1px solid #e5e8eb;
     }
 
 }
+/* ==========================================
+   NOTIFICATIONS
+========================================== */
+
+.notifications-page {
+    background-color: #f6f9fa;
+    padding: 70px 0;
+}
+
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.notification-header h1 {
+    color: #143447;
+    font-weight: 700;
+}
+
+
+.notification-list {
+    background-color: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px;
+    border-bottom: 1px solid #e7ecef;
+}
+
+
+.notification-item:last-child {
+    border-bottom: 0;
+}
+
+
+.notification-unread {
+    background-color: #eef9fa;
+}
+
+
+.notification-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 50%;
+    background-color: #e5f6f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.notification-icon i {
+    color: #007c91;
+    font-size: 22px;
+}
+
+
+.notification-content {
+    flex: 1;
+}
+
+
+.notification-content p {
+    margin: 0;
+    color: #263746;
+}
+
+
+.notification-content small {
+    display: block;
+    color: #85949c;
+    margin-top: 5px;
+}
+
+
+.notification-empty {
+    text-align: center;
+    padding: 70px 20px;
+}
+
+
+.notification-empty i {
+    color: #9aacb5;
+    font-size: 48px;
+}
+
+
+.notification-empty h3 {
+    color: #143447;
+    margin-top: 15px;
+}
+
+
+.notification-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #dc3545;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 0 5px;
+    margin-left: 4px;
+}
+
+
+@media (max-width: 768px) {
+
+    .notification-header {
+        display: block;
+    }
+
+
+    .notification-header form {
+        margin-top: 20px;
+    }
+
+
+    .notification-item {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+}

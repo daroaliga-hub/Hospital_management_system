@@ -199,7 +199,31 @@
 
                         {% endif %}
 
+    <li class="nav-item">
 
+        <a
+            class="nav-link position-relative"
+            href="{% url 'notifications' %}"
+        >
+
+            <i class="bi bi-bell"></i>
+
+            Notifications
+
+
+            {% if unread_notification_count > 0 %}
+
+                <span
+                    class="notification-badge"
+                >
+                    {{ unread_notification_count }}
+                </span>
+
+            {% endif %}
+
+        </a>
+
+    </li>
     <li class="nav-item ms-lg-3">
 
         <a

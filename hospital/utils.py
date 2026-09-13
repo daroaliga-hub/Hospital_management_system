@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from django.utils import timezone
-from .models import Appointment, DoctorAvailability
+from .models import (Appointment, DoctorAvailability, Notification)
 
 
 def doctor_is_available(
@@ -192,3 +192,24 @@ def get_available_time_slots(
 
 
     return available_slots
+
+def create_notification(
+    recipient,
+    message,
+    notification_type='general',
+    appointment=None
+):
+
+    if recipient is None:
+
+        return None
+
+
+    return Notification.objects.create(
+        recipient=recipient,
+        message=message,
+        notification_type=notification_type,
+        appointment=appointment
+    )
+    
+    
