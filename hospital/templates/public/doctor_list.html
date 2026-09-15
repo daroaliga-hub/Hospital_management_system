@@ -2,7 +2,9 @@
 
 
 {% block title %}
-Find a Doctor | CarePoint Hospital
+
+Doctors
+
 {% endblock %}
 
 
@@ -10,66 +12,50 @@ Find a Doctor | CarePoint Hospital
 {% block content %}
 
 
-<!-- ================================= -->
-<!-- PAGE HEADER -->
-<!-- ================================= -->
-
 <section class="doctor-header">
 
-    <div class="container">
+<div class="container text-center">
 
-        <div class="text-center">
 
-            <span class="section-small-title">
-                OUR PHYSICIANS
-            </span>
+<h1 class="section-title">
 
-            <h1 class="display-5 fw-bold mt-3">
-                Find a Doctor
-            </h1>
+Find Your Doctor
 
-            <p class="lead">
-                Search our specialists and find the right
-                healthcare professional for your needs.
-            </p>
+</h1>
 
-        </div>
 
-    </div>
+<p class="section-description mx-auto">
+
+Choose from experienced healthcare professionals
+and book your appointment online.
+
+</p>
+
+
+</div>
 
 </section>
 
 
 
-<!-- ================================= -->
-<!-- SEARCH AREA -->
-<!-- ================================= -->
 
-<section class="doctor-search-section">
+
+<section class="doctor-search">
 
 
 <div class="container">
 
 
-<div class="search-box">
+<div class="search-card">
 
 
 <form method="GET">
 
 
-<div class="row g-3 align-items-end">
+<div class="row g-3">
 
 
-<!-- Doctor Search -->
-
-<div class="col-lg-6">
-
-
-<label class="form-label">
-
-Doctor Name
-
-</label>
+<div class="col-md-5">
 
 
 <input
@@ -78,9 +64,9 @@ type="text"
 
 name="search"
 
-class="form-control form-control-lg"
+class="form-control"
 
-placeholder="Search by doctor name"
+placeholder="Search doctor name..."
 
 value="{{ request.GET.search }}"
 
@@ -91,31 +77,21 @@ value="{{ request.GET.search }}"
 
 
 
-
-<!-- Department Filter -->
-
-<div class="col-lg-4">
-
-
-<label class="form-label">
-
-Specialty
-
-</label>
+<div class="col-md-5">
 
 
 <select
 
 name="department"
 
-class="form-select form-select-lg"
+class="form-select"
 
 >
 
 
 <option value="">
 
-All Specialties
+All Departments
 
 </option>
 
@@ -154,29 +130,21 @@ selected
 
 
 
-<!-- Button -->
-
-
-<div class="col-lg-2">
+<div class="col-md-2">
 
 
 <button
 
-class="btn btn-primary btn-lg w-100"
+class="btn btn-primary w-100"
 
 >
 
-
-<i class="bi bi-search"></i>
-
 Search
-
 
 </button>
 
 
 </div>
-
 
 
 </div>
@@ -197,34 +165,28 @@ Search
 
 
 
-<!-- ================================= -->
-<!-- DOCTOR RESULTS -->
-<!-- ================================= -->
 
-<section class="doctor-results">
+<section class="section-padding">
 
 
 <div class="container">
 
 
-<div class="row g-4">
+<div class="row">
 
 
 {% for doctor in doctors %}
 
 
 
-<div class="col-md-6 col-lg-4">
+<div class="col-lg-4 col-md-6 mb-4">
 
 
-<div class="doctor-card">
+<div class="doctor-card-modern">
 
 
 
-<!-- Image -->
-
-
-<div class="doctor-image">
+<div class="doctor-image-wrapper">
 
 
 {% if doctor.image %}
@@ -233,6 +195,8 @@ Search
 <img
 
 src="{{ doctor.image.url }}"
+
+class="doctor-image"
 
 alt="{{ doctor.name }}"
 
@@ -244,9 +208,7 @@ alt="{{ doctor.name }}"
 
 <div class="doctor-placeholder">
 
-
 <i class="bi bi-person"></i>
-
 
 </div>
 
@@ -254,65 +216,28 @@ alt="{{ doctor.name }}"
 {% endif %}
 
 
+
 </div>
 
 
 
 
-<!-- Information -->
+<div class="doctor-content">
 
 
-<div class="doctor-info">
-
-
-
-<h4>
+<h3>
 
 Dr. {{ doctor.name }}
 
-</h4>
+</h3>
 
 
 
-<p class="doctor-specialty">
-
-
-<i class="bi bi-heart-pulse"></i>
-
+<p class="doctor-speciality">
 
 {{ doctor.department.name }}
 
-
 </p>
-
-
-
-
-<p>
-
-
-<i class="bi bi-award"></i>
-
-
-{{ doctor.qualification }}
-
-
-</p>
-
-
-
-
-<p>
-
-
-<i class="bi bi-clock-history"></i>
-
-
-{{ doctor.experience }} years experience
-
-
-</p>
-
 
 
 
@@ -322,10 +247,54 @@ Dr. {{ doctor.name }}
 <i class="bi bi-star-fill"></i>
 
 
-{{ doctor.rating }}
+{{ doctor.rating }}/5
 
 
 </div>
+
+
+
+
+
+<div class="doctor-info">
+
+
+<p>
+
+<i class="bi bi-mortarboard"></i>
+
+{{ doctor.qualification }}
+
+</p>
+
+
+
+<p>
+
+<i class="bi bi-briefcase"></i>
+
+{{ doctor.experience }} years experience
+
+</p>
+
+
+
+{% if doctor.location %}
+
+<p>
+
+<i class="bi bi-geo-alt"></i>
+
+{{ doctor.location }}
+
+</p>
+
+{% endif %}
+
+
+
+</div>
+
 
 
 
@@ -334,13 +303,11 @@ Dr. {{ doctor.name }}
 
 href="{% url 'doctor_profile' doctor.id %}"
 
-class="btn btn-outline-primary w-100 mt-3"
+class="btn btn-outline-primary w-100"
 
 >
 
-
 View Profile
-
 
 </a>
 
@@ -357,24 +324,24 @@ View Profile
 
 
 
-
 {% empty %}
 
 
 
-<div class="col-12">
+<div class="text-center">
+
+<h4>
+
+No doctors found
+
+</h4>
 
 
-<div class="alert alert-info text-center">
+<p>
 
+Try another search.
 
-No doctors found.
-
-Try changing your search.
-
-
-</div>
-
+</p>
 
 </div>
 
@@ -390,7 +357,6 @@ Try changing your search.
 
 
 </section>
-
 
 
 {% endblock %}

@@ -14,6 +14,7 @@
         {% endblock %}
     </title>
 
+
     <!-- Bootstrap CSS -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -35,9 +36,8 @@
     {% block extra_css %}
     {% endblock %}
 </head>
-
 <body>
-
+    
     <!-- ========================================= -->
     <!-- TOP INFORMATION BAR -->
     <!-- ========================================= -->
@@ -71,205 +71,305 @@
     <!-- MAIN NAVIGATION -->
     <!-- ========================================= -->
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <nav class="navbar navbar-expand-lg hospital-navbar">
 
-        <div class="container">
-
-            <!-- Logo -->
-            <a class="navbar-brand hospital-logo" href="{% url 'home' %}">
-
-                <i class="bi bi-hospital"></i>
-
-                <span>
-                    CarePoint
-                </span>
-
-            </a>
+    <div class="container">
 
 
-            <!-- Mobile Menu Button -->
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#mainNavbar"
-            >
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <!-- Logo -->
 
-
-            <!-- Navigation -->
-            <div
-                class="collapse navbar-collapse"
-                id="mainNavbar"
-            >
-
-                <ul class="navbar-nav ms-auto align-items-lg-center">
-
-                    <li class="nav-item">
-
-                        <a
-                            class="nav-link"
-                            href="{% url 'home' %}"
-                        >
-                            Home
-                        </a>
-
-                    </li>
-
-
-                    <li class="nav-item">
-
-                        <a
-                            class="nav-link"
-                            href="{% url 'doctor_list' %}"
-                        >
-                            Find a Doctor
-                        </a>
-
-                    </li>
-
-
-                    <li class="nav-item">
-
-                        <a
-                            class="nav-link"
-                            href="{% url 'services' %}"
-                        >
-                            Services
-                        </a>
-
-                    </li>
-
-
-                    <li class="nav-item">
-
-                        <a
-                            class="nav-link"
-                            href="{% url 'locations' %}"
-                        >
-                            Locations
-                        </a>
-
-                    </li>
-
-
-                    {% if request.user.is_authenticated %}
-
-                        {% if request.user.is_staff or request.user.is_superuser %}
-
-                            <li class="nav-item">
-
-                                <a
-                                    class="nav-link"
-                                    href="{% url 'hospital_admin_dashboard' %}"
-                                >
-                                     Admin Dashboard
-                                </a>
-
-                            </li>
-
-
-                        {% elif request.user|has_group:"Doctor" %}
-
-                            <li class="nav-item">
-
-                                <a
-                                    class="nav-link"
-                                    href="{% url 'doctor_dashboard' %}"
-                                >
-                                    Doctor Dashboard
-                                </a>
-
-                            </li>
-
-
-                        {% elif request.user|has_group:"Patient" %}
-
-                            <li class="nav-item">
-
-                                <a
-                                    class="nav-link"
-                                    href="{% url 'dashboard' %}"
-                                >
-                                    Patient Portal
-                                </a>
-
-                            </li>
-
-                        {% endif %}
-
-    <li class="nav-item">
-
-        <a
-            class="nav-link position-relative"
-            href="{% url 'notifications' %}"
+        <a 
+        class="navbar-brand hospital-logo"
+        href="{% url 'home' %}"
         >
 
-            <i class="bi bi-bell"></i>
+            <i class="bi bi-hospital"></i>
 
-            Notifications
+            CarePoint
+
+        </a>
 
 
-            {% if unread_notification_count > 0 %}
 
-                <span
-                    class="notification-badge"
-                >
-                    {{ unread_notification_count }}
-                </span>
+        <!-- Mobile Toggle -->
+
+        <button
+
+        class="navbar-toggler"
+
+        type="button"
+
+        data-bs-toggle="collapse"
+
+        data-bs-target="#mainNavbar"
+
+        >
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+
+
+        <div 
+        class="collapse navbar-collapse"
+        id="mainNavbar"
+        >
+
+
+
+            <!-- Main Links -->
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+
+                <li class="nav-item">
+
+                    <a 
+                    class="nav-link"
+                    href="{% url 'home' %}"
+                    >
+
+                    Home
+
+                    </a>
+
+                </li>
+
+
+
+                <li class="nav-item">
+
+                    <a 
+                    class="nav-link"
+                    href="{% url 'doctor_list' %}"
+                    >
+
+                    Doctors
+
+                    </a>
+
+                </li>
+
+
+            </ul>
+
+
+
+
+            <!-- User Section -->
+
+
+            <ul class="navbar-nav align-items-center">
+
+
+            {% if user.is_authenticated %}
+
+
+
+                <!-- Patient -->
+
+                {% if user.groups.all.0.name == "Patient" %}
+
+                <li class="nav-item">
+
+                    <a 
+                    class="nav-link"
+                    href="{% url 'dashboard' %}"
+                    >
+
+                    Dashboard
+
+                    </a>
+
+                </li>
+
+
+                {% endif %}
+
+
+
+                <!-- Doctor -->
+
+
+                {% if user.groups.all.0.name == "Doctor" %}
+
+                <li class="nav-item">
+
+                    <a 
+                    class="nav-link"
+                    href="{% url 'doctor_dashboard' %}"
+                    >
+
+                    Doctor Portal
+
+                    </a>
+
+                </li>
+
+
+                {% endif %}
+
+
+
+
+                <!-- Notification -->
+
+
+                <li class="nav-item dropdown">
+
+
+                    <a
+
+                    class="nav-link position-relative"
+
+                    href="#"
+
+                    data-bs-toggle="dropdown"
+
+                    >
+
+
+                    <i class="bi bi-bell"></i>
+
+
+                    {% if unread_notifications %}
+
+                    <span class="notification-badge">
+
+                        {{ unread_notifications }}
+
+                    </span>
+
+                    {% endif %}
+
+
+                    </a>
+
+
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+
+
+                        <li>
+
+                        <a 
+                        class="dropdown-item"
+                        href="{% url 'notifications' %}"
+                        >
+
+                        Notifications
+
+                        </a>
+
+                        </li>
+
+
+                    </ul>
+
+
+                </li>
+
+
+
+
+
+
+                <!-- Account Dropdown -->
+
+                <li class="nav-item dropdown">
+
+
+                    <a
+
+                    class="nav-link dropdown-toggle"
+
+                    href="#"
+
+                    data-bs-toggle="dropdown"
+
+                    >
+
+                    {{ user.username }}
+
+                    </a>
+
+
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+
+
+                        <li>
+
+                        <a 
+                        class="dropdown-item"
+                        href="{% url 'logout' %}"
+                        >
+
+                        Logout
+
+                        </a>
+
+                        </li>
+
+
+                    </ul>
+
+
+                </li>
+
+
+
+
+            {% else %}
+
+
+
+                <li class="nav-item">
+
+                    <a 
+                    class="btn btn-outline-primary me-2"
+                    href="{% url 'login' %}"
+                    >
+
+                    Login
+
+                    </a>
+
+                </li>
+
+
+
+                <li class="nav-item">
+
+                    <a 
+                    class="btn btn-primary"
+                    href="{% url 'register' %}"
+                    >
+
+                    Register
+
+                    </a>
+
+                </li>
+
+
 
             {% endif %}
 
-        </a>
 
-    </li>
-    <li class="nav-item ms-lg-3">
-
-        <a
-            class="btn btn-outline-primary"
-            href="{% url 'logout' %}"
-        >
-            Logout
-        </a>
-
-    </li>
+            </ul>
 
 
-    {% else %}
-
-        <li class="nav-item">
-
-            <a
-                class="nav-link"
-                href="{% url 'login' %}"
-            >
-                Login
-            </a>
-
-        </li>
-
-
-        <li class="nav-item ms-lg-3">
-
-            <a
-                class="btn btn-primary"
-                href="{% url 'register' %}"
-            >
-                Create Account
-            </a>
-
-        </li>
-
-    {% endif %}
-
-                </ul>
-
-            </div>
 
         </div>
 
-    </nav>
+
+    </div>
+
+
+</nav>
 
 
     <!-- ========================================= -->
@@ -454,7 +554,9 @@
     <script src="{% static 'js/main.js' %}"></script>
 
     {% block extra_js %}
-    {% endblock %}
+    {% endblock  %}
+        
+
 
 </body>
 </html>

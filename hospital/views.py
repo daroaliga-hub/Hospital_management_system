@@ -933,9 +933,7 @@ def create_doctor(request):
                         'languages'
                     ),
 
-                    available_days=form.cleaned_data.get(
-                        'available_days'
-                    ),
+                    
 
                     rating=form.cleaned_data[
                         'rating'

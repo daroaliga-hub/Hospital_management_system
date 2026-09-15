@@ -3,214 +3,118 @@
 
 <section class="patient-dashboard">
   <div class="container">
-    <!-- ================================= -->
-    <!-- WELCOME -->
-    <!-- ================================= -->
+    <!-- Welcome -->
 
-    <div class="dashboard-header">
-      <div>
-        <span class="section-small-title"> PATIENT PORTAL </span>
+    <div class="dashboard-welcome">
+      <h1>Welcome, {{ patient.full_name }}</h1>
 
-        <h1>Welcome, {{ patient.full_name }}</h1>
-
-        <p>Manage your appointments and healthcare information.</p>
-      </div>
-
-      <div>
-        <a href="{% url 'book_appointment' %}" class="btn btn-primary">
-          <i class="bi bi-calendar-plus"></i>
-
-          Book Appointment
-        </a>
-      </div>
+      <p>Manage your appointments and healthcare information.</p>
     </div>
 
-    <!-- ================================= -->
-    <!-- QUICK STATS -->
-    <!-- ================================= -->
+    <!-- Quick Actions -->
 
-    <div class="row g-4 mt-4">
-      <div class="col-md-4">
-        <div class="dashboard-stat">
-          <i class="bi bi-calendar-check"></i>
+    <div class="dashboard-actions">
+      <a href="{% url 'book_appointment' %}" class="btn btn-primary">
+        Book Appointment
+      </a>
 
-          <div>
-            <h3>{{ appointments.count }}</h3>
-
-            <p>Total Appointments</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="dashboard-stat">
-          <i class="bi bi-clock-history"></i>
-
-          <div>
-            <h3>{{ upcoming|length }}</h3>
-
-            <p>Upcoming Visits</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="dashboard-stat">
-          <i class="bi bi-check-circle"></i>
-
-          <div>
-            <h3>{{ completed|length }}</h3>
-
-            <p>Completed Visits</p>
-          </div>
-        </div>
-      </div>
+      <a href="{% url 'doctor_list' %}" class="btn btn-outline-primary">
+        Find Doctor
+      </a>
     </div>
 
-    <!-- ================================= -->
-    <!-- UPCOMING APPOINTMENTS -->
-    <!-- ================================= -->
+    <!-- Upcoming Appointments -->
 
-    <div class="dashboard-section mt-5">
-      <div class="section-title-row">
+    <section class="dashboard-section">
+      <div class="section-header">
         <h2>Upcoming Appointments</h2>
-
-        <a href="#appointments"> View All </a>
       </div>
 
-      {% for appointment in upcoming %}
+      <div class="row">
+        {% for appointment in upcoming %}
 
-      <div class="appointment-card">
-        <div class="appointment-icon">
-          <i class="bi bi-person-badge"></i>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="appointment-card">
+            <div class="appointment-header">
+              <h4>Dr. {{ appointment.doctor.name }}</h4>
+
+              <span class="status {{ appointment.status }}">
+                {{ appointment.status }}
+              </span>
+            </div>
+
+            <p>
+              <i class="bi bi-calendar"></i>
+
+              {{ appointment.date }}
+            </p>
+
+            <p>
+              <i class="bi bi-clock"></i>
+
+              {{ appointment.time }}
+            </p>
+
+            <p>
+              <i class="bi bi-hospital"></i>
+
+              {{ appointment.department.name }}
+            </p>
+
+            <a
+              href="{% url 'doctor_profile' appointment.doctor.id %}"
+              class="btn btn-outline-primary"
+            >
+              View Doctor
+            </a>
+          </div>
         </div>
 
-        <div class="appointment-details">
-          <h4>Dr. {{ appointment.doctor.name }}</h4>
+        {% empty %}
 
-          <p>{{ appointment.department.name }}</p>
+        <div class="empty-state">
+          <i class="bi bi-calendar-x"></i>
 
-          <p>
-            <i class="bi bi-calendar"></i>
+          <h4>No upcoming appointments</h4>
 
-            {{ appointment.date }} &nbsp;
-
-            <i class="bi bi-clock"></i>
-
-            {{ appointment.time }}
-          </p>
+          <p>Book an appointment with one of our specialists.</p>
         </div>
 
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Completed Appointments -->
+
+    <section class="dashboard-section">
+      <h2>Medical History</h2>
+
+      {% for appointment in completed %}
+
+      <div class="history-card">
         <div>
-          <span class="status {{ appointment.status }}">
-            {{ appointment.status|title }}
-          </span>
+          <h5>Dr. {{ appointment.doctor.name }}</h5>
 
-          <a
-            href="{% url 'appointment_detail' appointment.id %}"
-            class="btn btn-outline-primary btn-sm mt-2"
-          >
-            View Details
-          </a>
+          <p>{{ appointment.date }}</p>
         </div>
+
+        {% if appointment.medical_notes %}
+
+        <div class="medical-notes">
+          <strong> Doctor Notes: </strong>
+
+          <p>{{ appointment.medical_notes }}</p>
+        </div>
+
+        {% endif %}
       </div>
 
       {% empty %}
 
-      <div class="alert alert-info">No upcoming appointments.</div>
+      <p>No completed appointments yet.</p>
 
       {% endfor %}
-    </div>
-
-    <!-- ================================= -->
-    <!-- QUICK ACTIONS -->
-    <!-- ================================= -->
-
-    <div class="dashboard-section mt-5">
-      <h2>Quick Actions</h2>
-
-      <div class="row g-4 mt-3">
-        <div class="col-md-4">
-          <a href="{% url 'doctor_list' %}" class="dashboard-action">
-            <i class="bi bi-search"></i>
-
-            <h5>Find a Doctor</h5>
-
-            <p>Search healthcare specialists.</p>
-          </a>
-        </div>
-
-        <div class="col-md-4">
-          <a href="{% url 'book_appointment' %}" class="dashboard-action">
-            <i class="bi bi-calendar-plus"></i>
-
-            <h5>Book Appointment</h5>
-
-            <p>Schedule your next visit.</p>
-          </a>
-        </div>
-
-        <div class="col-md-4">
-          <a href="{% url 'patient_profile' %}" class="dashboard-action">
-            <i class="bi bi-person"></i>
-
-            <h5>My Profile</h5>
-
-            <p>Update personal information.</p>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- ================================= -->
-    <!-- APPOINTMENT HISTORY -->
-    <!-- ================================= -->
-
-    <div id="appointments" class="dashboard-section mt-5">
-      <h2>Appointment History</h2>
-
-      <div class="table-responsive mt-3">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Doctor</th>
-
-              <th>Date</th>
-
-              <th>Time</th>
-
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {% for appointment in appointments %}
-
-            <tr>
-              <td>Dr. {{ appointment.doctor.name }}</td>
-
-              <td>{{ appointment.date }}</td>
-
-              <td>{{ appointment.time }}</td>
-
-              <td>{{ appointment.status|title }}</td>
-              <td>
-                <a
-                  href="{% url 'appointment_detail' appointment.id %}"
-                  class="btn btn-sm btn-outline-primary"
-                >
-                  Details
-                </a>
-              </td>
-            </tr>
-
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    </section>
   </div>
 </section>
-
 {% endblock %}

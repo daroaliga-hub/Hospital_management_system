@@ -326,10 +326,7 @@ class DoctorCreationForm(UserCreationForm):
         required=False
     )
 
-    available_days = forms.CharField(
-        max_length=200,
-        required=False
-    )
+    
 
     rating = forms.DecimalField(
         max_digits=2,

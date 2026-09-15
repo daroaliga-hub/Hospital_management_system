@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 
 # Create your models here.
@@ -17,8 +18,8 @@ class Doctor(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        null=True, # For production, we would remove null=True.
-        blank=True
+        #null=True, # For production, we would remove null=True.
+        #blank=True
     )
 
     name = models.CharField(
@@ -64,10 +65,7 @@ class Doctor(models.Model):
         blank=True
     )
 
-    available_days = models.CharField(
-        max_length=200,
-        blank=True
-    )
+
 
     rating = models.DecimalField(
         max_digits=2,
@@ -141,7 +139,7 @@ class DoctorAvailability(models.Model):
         )
 
 class Patient(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,)
     full_name = models.CharField(max_length=150)
     date_of_birth = models.DateField()
     gender = models.CharField(max_length=10, choices=[('Male','Male'),('Female','Female'),('Other','Other')])
@@ -178,7 +176,60 @@ class Appointment(models.Model):
     unique=True,
     blank=True
     )
+    class Meta:
 
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    'doctor',
+                    'date',
+                    'time',
+                ],
+                condition=Q(
+                    status__in=[
+                        'pending',
+                        'confirmed'
+                    ]
+                ),
+                name='uniq_active_doctor_slot'
+            ),
+
+        models.UniqueConstraint(
+            fields=[
+                'patient',
+                'date',
+                'time',
+            ],
+            condition=Q(
+                status__in=[
+                    'pending',
+                    'confirmed'
+                ]
+            ),
+            name='uniq_active_patient_slot'
+        ),
+    ]
+
+
+    indexes = [
+
+        models.Index(
+            fields=[
+                'doctor',
+                'date',
+                'status'
+            ]
+        ),
+
+        models.Index(
+            fields=[
+                'patient',
+                'date',
+                'status'
+            ]
+        ),
+    ]
 
     
     def save(self, *args, **kwargs):
