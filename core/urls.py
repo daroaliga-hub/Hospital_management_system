@@ -23,3 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('hospital.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+handler404 = 'hospital.views.custom_404'
+
+handler403 = 'hospital.views.custom_403'

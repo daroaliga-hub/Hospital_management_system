@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+
+
+{% block title %}
+
+Access Denied
+
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<section class="error-section">
+
+
+<div class="container text-center">
+
+
+<div class="error-card">
+
+
+<i class="bi bi-shield-lock"></i>
+
+
+<h1>
+
+403
+
+</h1>
+
+
+<h2>
+
+Access Denied
+
+</h2>
+
+
+
+<p>
+
+You do not have permission to access this page.
+
+</p>
+
+
+
+<a
+
+href="{% url 'home' %}"
+
+class="btn btn-primary"
+
+>
+
+Return Home
+
+</a>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+{% endblock content %}
